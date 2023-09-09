@@ -1,4 +1,5 @@
-import 'features/number_trivia/presentation/pages/number_trivia_page.dart';
+import 'package:book_store/core/theme/colors.dart';
+import 'package:book_store/features/home/presentation/pages/home_page.dart';
 
 import 'injection_container.dart' as di;
 import 'package:flutter/material.dart';
@@ -13,12 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Number Trivia',
+      title: 'Book store',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: NumberTriviaPage(),
+      theme: ThemeData(brightness: Brightness.light, primaryColor: primary),
+      // TODO: Handle check JWT to routing home page or login page
+      home: HomePage(),
     );
   }
 }

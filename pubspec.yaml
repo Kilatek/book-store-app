@@ -38,6 +38,11 @@ dependencies:
   http: ^0.13.3
   internet_connection_checker: ^0.0.1+2
   shared_preferences: ^2.0.8
+  flutter_svg: ^0.22.0
+  multiavatar: ^0.1.5
+  font_awesome_flutter: ^9.2.0
+  badges: ^3.1.2
+
 
 
   # The following adds the Cupertino Icons font to your application.
