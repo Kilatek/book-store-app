@@ -1,16 +1,56 @@
-# book_store
+# Book Store TDD Clean Architecture
 
-A new Flutter project.
+Flutter project using TDD Clean Architecture and bloc pattern
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+## Table of Contents
 
-A few resources to get you started if this is your first Flutter project:
+- [Book Store TDD Clean Architecture](#book-store-tdd-clean-architecture)
+  - [Getting Started](#getting-started)
+  - [Table of Contents](#table-of-contents)
+    - [Features](#features)
+    - [Requirements](#requirements)
+    - [Config](#config)
+    - [Project Structure](#project-structure)
+    - [Libraries Used](#libraries-used)
+    - [Installation](#installation)
+    - [Usage](#usage)
+    - [Tests](#tests)
+    - [Contributing](#contributing)
+    - [License](#license)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Requirements
+
+- Dart: 3.1.1
+- Flutter SDK: 3.13.3
+- CocoaPods: 1.12.1
+
+### Config
+
+- Firebase config:
+  - Create project in here <https://console.firebase.google.com/>
+  - Add Firebase to flutter app <https://firebase.google.com/docs/flutter/setup>
+  - Enable Database Realtime.
+  - Download files from [Google Driver](https://drive.google.com/drive/folders/1weVqSGtMlAySuwY3LpYwLNcCoz0wkI5F):
+    - firebase_options.dart >> lib/
+    - google-services.json >> android/app/
+    - keystore.properties >> android/app/
+    - GoogleService-Info.plist >> ios/Runner/
+    - firebase_app_id_file.json >> ios/
+
+### Project Structure
+
+### Libraries Used
+
+### Installation
+
+### Usage
+
+### Tests
+
+### Contributing
+
+### License
