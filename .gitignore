@@ -50,3 +50,14 @@ app.*.map.json
 **/keystore.properties
 **/GoogleService-Info.plist
 **/firebase_app_id_file.json
+
+# generated file
+*.g.dart
+*.graphql.dart
+*.gr.dart
+*.freezed.dart
+*.mapper.dart
+*.config.dart
+*.gen.dart
+*.mocks.dart
+**/generated/
