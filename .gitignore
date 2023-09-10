@@ -42,3 +42,22 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Credentials
+
+**/firebase_options.dart
+**/google-services.json
+**/keystore.properties
+**/GoogleService-Info.plist
+**/firebase_app_id_file.json
+
+# generated file
+*.g.dart
+*.graphql.dart
+*.gr.dart
+*.freezed.dart
+*.mapper.dart
+*.config.dart
+*.gen.dart
+*.mocks.dart
+**/generated/

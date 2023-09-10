@@ -1,24 +1,24 @@
-import 'package:book_store/core/theme/colors.dart';
-import 'package:book_store/features/home/presentation/pages/home_page.dart';
+import 'dart:async';
 
-import 'injection_container.dart' as di;
+import 'package:book_store/core/config/app_config.dart';
+import 'package:book_store/core/util/log_utils.dart';
+import 'package:book_store/features/my_app/my_app.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
+void main() => runZonedGuarded(
+      _runMyApp,
+      (error, stackTrace) => _reportError(error: error, stackTrace: stackTrace),
+    );
+
+Future<void> _runMyApp() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await di.init();
-  runApp(MyApp());
+  await Firebase.initializeApp();
+  await AppConfig.getInstance().init();
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Book store',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(brightness: Brightness.light, primaryColor: primary),
-      // TODO: Handle check JWT to routing home page or login page
-      home: HomePage(),
-    );
-  }
+void _reportError({required error, required StackTrace stackTrace}) {
+  Log.e(error, stackTrace: stackTrace, name: 'Uncaught exception');
+  // FirebaseCrashlytics.instance.recordError(error, stackTrace);
 }
