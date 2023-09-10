@@ -32,13 +32,15 @@ class AvatarImage extends StatelessWidget {
             height: height,
             decoration: BoxDecoration(
               border: Border.all(
-                  color: borderColor ?? Theme.of(context).cardColor,
-                  width: borderWidth),
+                color: borderColor ?? Theme.of(context).cardColor,
+                width: borderWidth,
+              ),
               color: bgColor,
               shape: BoxShape.circle,
             ),
             child: SvgPicture.string(
-                multiavatar(name, trBackground: trBackground)),
+              multiavatar(name, trBackground: trBackground),
+            ),
           )
         : Container(
             width: width,
@@ -57,8 +59,10 @@ class AvatarImage extends StatelessWidget {
                   offset: const Offset(1, 1), // changes position of shadow
                 ),
               ],
-              image:
-                  DecorationImage(image: NetworkImage(name), fit: BoxFit.cover),
+              image: DecorationImage(
+                image: NetworkImage(name),
+                fit: BoxFit.cover,
+              ),
             ),
           );
   }

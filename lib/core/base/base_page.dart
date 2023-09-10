@@ -3,11 +3,13 @@ import 'package:book_store/core/base/common/common_bloc.dart';
 import 'package:book_store/core/base/common/common_state.dart';
 import 'package:book_store/core/error/error_listener_mixin.dart';
 import 'package:book_store/core/error/handle_exception.dart';
+import 'package:book_store/core/theme/app_colors.dart';
 import 'package:book_store/core/util/log_mixin.dart';
-import 'package:book_store/di/di.dart';
+import 'package:book_store/features/my_app/app_bloc.dart';
 import 'package:book_store/navigation/app_navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 abstract class BasePageState<T extends StatefulWidget, B extends BaseBloc>
@@ -28,31 +30,27 @@ abstract class BasePageState<T extends StatefulWidget, B extends BaseBloc>
 }
 
 abstract class BasePageStateDelegete<T extends StatefulWidget,
-        B extends BaseBloc> extends State<T>
-    with AutomaticKeepAliveClientMixin, LogMixin {
-  late final AppNavigator navigator = getIt.get<AppNavigator>();
+    B extends BaseBloc> extends State<T> with LogMixin {
+  late final AppNavigator navigator = GetIt.instance.get<AppNavigator>();
+  late final AppBloc appBloc = GetIt.instance.get<AppBloc>();
   late final HandleException handleException = HandleException();
-  late final CommonBloc commonBloc = getIt.get<CommonBloc>();
+  late final CommonBloc commonBloc = GetIt.instance.get<CommonBloc>();
 
-  late final B bloc = getIt.get<B>()
+  late final B bloc = GetIt.instance.get<B>()
     ..navigator = navigator
+    ..appBloc = appBloc
     ..commonBloc = commonBloc;
 
   bool isAppWidget = false;
 
   @override
-  bool get wantKeepAlive => false;
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     return Provider(
       create: (_) => navigator,
       child: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (_) => bloc),
-          BlocProvider(create: (_) => commonBloc),
+          BlocProvider<B>(create: (_) => bloc),
+          BlocProvider<CommonBloc>(create: (_) => commonBloc),
         ],
         child: buildPageListener(
           child: isAppWidget
@@ -80,6 +78,8 @@ abstract class BasePageStateDelegete<T extends StatefulWidget,
   Widget buildPage(BuildContext context);
 
   Widget buildPageLoading() => const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: AppColors.black,
+        ),
       );
 }

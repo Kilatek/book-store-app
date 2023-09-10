@@ -1,15 +1,15 @@
 import 'dart:math';
 import 'package:book_store/core/theme/app_colors.dart';
 import 'package:book_store/features/home/presentation/widgets/avatar_image.dart';
-import 'package:book_store/features/home_backup/domain/entities/book.dart';
+import 'package:book_store/features/home_backup/domain/entities/author.dart';
 import 'package:flutter/material.dart';
 
-class BookItem extends StatelessWidget {
-  const BookItem({
+class AuthorItem extends StatelessWidget {
+  const AuthorItem({
     Key? key,
-    required this.book,
+    required this.author,
   }) : super(key: key);
-  final Book book;
+  final Author author;
 
   @override
   Widget build(BuildContext context) {
@@ -21,36 +21,38 @@ class BookItem extends StatelessWidget {
         children: [
           Stack(children: [
             Container(
-                padding: const EdgeInsets.only(bottom: 50, right: 40),
-                width: width,
-                height: height,
+              padding: const EdgeInsets.only(bottom: 50, right: 40),
+              width: width,
+              height: height,
+              decoration: BoxDecoration(
+                color: AppColors.black,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.shadowColor.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: const Offset(1, 1),
+                  ),
+                ],
+              ),
+              child: Container(
+                width: width / 2,
+                height: height / 2,
                 decoration: BoxDecoration(
-                  color: AppColors.black,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.shadowColor.withOpacity(0.1),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: const Offset(1, 1), // changes position of shadow
-                    ),
-                  ],
+                  color: Color(Random().nextInt(0xffffffff)).withAlpha(0xff),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                  ),
                 ),
-                child: Container(
-                  width: width / 2,
-                  height: height / 2,
-                  decoration: BoxDecoration(
-                      color:
-                          Color(Random().nextInt(0xffffffff)).withAlpha(0xff),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15))),
-                )),
+              ),
+            ),
             Container(
               width: width,
               height: height,
               padding: const EdgeInsets.all(8),
               child: AvatarImage(
-                book.image,
+                author.image,
                 isSVG: false,
                 radius: 8,
               ),
@@ -63,7 +65,7 @@ class BookItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                book.name,
+                "${author.firstName} ${author.lastName}",
                 style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
@@ -76,14 +78,16 @@ class BookItem extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                        text: "${book.price}\$",
-                        style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w500)),
+                      text: author.nationality,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     const TextSpan(text: "   "),
                     TextSpan(
-                      text: book.author.firstName,
+                      text: author.birthDate,
                       style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 16,
