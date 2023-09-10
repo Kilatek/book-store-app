@@ -46,7 +46,7 @@ class AuthorBloc extends Bloc<AuthorEvent, AuthorState> {
       });
     });
     on<DeleteAuthorsEvent>((event, emit) async {
-      final failureOrDelete = await deleteAuthor(event.authorId!);
+      final failureOrDelete = await deleteAuthor(event.authorId);
       failureOrDelete!.fold((failure) {
         emit(Error(message: "Get failed"));
       }, (data) {

@@ -1,15 +1,15 @@
+import 'package:book_store/core/error/app_error.dart';
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/error/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../data/models/author_get_all_model.dart';
 import '../entities/author.dart';
 
 abstract class AuthorRepository {
-  Future<Either<Failure, Author>>? createAuthor(Author author);
-  Future<Either<Failure, List<GetAuthorsModel>>>? getAuthors();
-  Future<Either<Failure, Author>>? findAuthor(String id);
-  Future<Either<Failure, GetAuthorsModel>>? updateAuthor(
+  Future<Either<AppError, Author>>? createAuthor(Author author);
+  Future<Either<AppError, List<GetAuthorsModel>>>? getAuthors();
+  Future<Either<AppError, Author>>? findAuthor(String id);
+  Future<Either<AppError, GetAuthorsModel>>? updateAuthor(
       GetAuthorsModel author);
-  Future<Either<Failure, NoParams>>? deleteAuthor(String id);
+  Future<Either<AppError, NoParams>>? deleteAuthor(String id);
 }

@@ -1,12 +1,13 @@
+import 'package:book_store/core/error/app_error.dart';
+import 'package:book_store/core/error/error_mapper.dart';
+import 'package:book_store/core/network/middleware/network_info.dart';
 import 'package:book_store/core/usecases/usecase.dart';
 import 'package:book_store/features/author/data/models/author_create_model.dart';
 import 'package:book_store/features/author/domain/entities/author.dart';
 import 'package:book_store/features/author/domain/respositories/author_repository.dart';
 
 import '../../../../core/error/exceptions.dart';
-import '../../../../core/network/network_info.dart';
 import '../datasources/author_remote_data_source.dart';
-import '../../../../core/error/failures.dart';
 
 import 'package:dartz/dartz.dart';
 
@@ -34,93 +35,93 @@ class AuthorRepositoryImpl implements AuthorRepository {
   });
 
   @override
-  Future<Either<Failure, Author>> createAuthor(Author author) async {
+  Future<Either<AppError, Author>> createAuthor(Author author) async {
     return await _createAuthor(() {
       return createAuthorRemoteDataSource.createAuthor(author)!;
     });
   }
 
-  Future<Either<Failure, Author>> _createAuthor(
+  Future<Either<AppError, Author>> _createAuthor(
       _AuthorCreatedModel _authorCreatedModel) async {
     if (await networkInfo.isConnected) {
       try {
         final authorCreate = await _authorCreatedModel();
-        return Right(authorCreate);
-      } on ServerException {
-        return Left(ServerFailure());
+        return right(authorCreate);
+      } catch (error) {
+        return left(ErrorMapperFactory.map(error));
       }
     } else {
-      return Left(ServerFailure());
+      throw NotInterNetException();
     }
   }
 
   @override
-  Future<Either<Failure, NoParams>>? deleteAuthor(String id) async {
+  Future<Either<AppError, NoParams>>? deleteAuthor(String id) async {
     return await _deleteAuthors(() {
       return deleteAuthorsRemoteDataSource.deleteAuthors(id)!;
     });
   }
 
-  Future<Either<Failure, NoParams>> _deleteAuthors(
+  Future<Either<AppError, NoParams>> _deleteAuthors(
       _DeleteAuthorsModel _deleteAuthorsModel) async {
     if (await networkInfo.isConnected) {
       try {
         final deleteAuthors = await _deleteAuthorsModel();
         return Right(deleteAuthors);
-      } on ServerException {
-        return Left(ServerFailure());
+      } catch (error) {
+        return left(ErrorMapperFactory.map(error));
       }
     } else {
-      return Left(ServerFailure());
+      throw NotInterNetException();
     }
   }
 
   @override
-  Future<Either<Failure, Author>>? findAuthor(String id) {
+  Future<Either<AppError, Author>>? findAuthor(String id) {
     // TODO: implement findAuthor
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, List<GetAuthorsModel>>>? getAuthors() async {
+  Future<Either<AppError, List<GetAuthorsModel>>>? getAuthors() async {
     return await _getAuthors(() {
       return getAllAuthorsRemoteDataSource.getAuthors()!;
     });
   }
 
-  Future<Either<Failure, List<GetAuthorsModel>>> _getAuthors(
+  Future<Either<AppError, List<GetAuthorsModel>>> _getAuthors(
       _GetAuthorsModel _getAuthorsModel) async {
     if (await networkInfo.isConnected) {
       try {
         final getAuthors = await _getAuthorsModel();
         return Right(getAuthors);
-      } on ServerException {
-        return Left(ServerFailure());
+      } catch (error) {
+        return left(ErrorMapperFactory.map(error));
       }
     } else {
-      return Left(ServerFailure());
+      throw NotInterNetException();
     }
   }
 
   @override
-  Future<Either<Failure, GetAuthorsModel>>? updateAuthor(
+  Future<Either<AppError, GetAuthorsModel>>? updateAuthor(
       GetAuthorsModel author) async {
     return await _updateAuthors(() {
       return updateAuthorsRemoteDataSource.updateAuthors(author)!;
     });
   }
 
-  Future<Either<Failure, GetAuthorsModel>> _updateAuthors(
+  Future<Either<AppError, GetAuthorsModel>> _updateAuthors(
       _UpdateAuthorsModel _updateAuthorsModel) async {
     if (await networkInfo.isConnected) {
       try {
         final updateAuthors = await _updateAuthorsModel();
         return Right(updateAuthors);
-      } on ServerException {
-        return Left(ServerFailure());
+      } catch (error) {
+        return left(ErrorMapperFactory.map(error));
       }
     } else {
-      return Left(ServerFailure());
+      throw NotInterNetException();
     }
   }
 }
