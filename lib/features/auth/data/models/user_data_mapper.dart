@@ -9,12 +9,11 @@ class UserDataMapper extends BaseDataMapper<AuthResponseData, User> {
 
   @override
   User mapToEntity(AuthResponseData? data) {
-    return User(
-      id: data?.id ?? User.defaultId,
-      username: data?.username ?? User.defaultUsername,
-      accessToken: data?.accessToken ?? User.defaultAccessToken,
-      firstName: data?.firstName ?? User.defaultFirstName,
-      lastName: data?.lastName ?? User.defaultLastName,
+    return const User(
+      id: User.defaultId,
+      username: User.defaultUsername,
+      firstName: User.defaultFirstName,
+      lastName: User.defaultLastName,
     );
   }
 }

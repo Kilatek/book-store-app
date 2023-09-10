@@ -1,5 +1,6 @@
 import 'package:book_store/core/error/app_error.dart';
 import 'package:book_store/core/error/error_mapper.dart';
+import 'package:book_store/core/preference/app_preferences.dart';
 import 'package:book_store/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:book_store/features/auth/data/models/user_data_mapper.dart';
 import 'package:book_store/features/auth/domain/entities/user.dart';
@@ -17,12 +18,14 @@ typedef TaskExcute<T> = Future<T> Function();
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
   final UserDataMapper userDataMapper;
+  final AppPreferences appPreferences;
   final NetworkInfo networkInfo;
 
   AuthRepositoryImpl({
     required this.remoteDataSource,
     required this.networkInfo,
     required this.userDataMapper,
+    required this.appPreferences,
   });
 
   @override
@@ -36,7 +39,10 @@ class AuthRepositoryImpl implements AuthRepository {
             email: email,
             password: password,
           );
-          return userDataMapper.mapToEntity(user.data);
+          if (user.accessToken != null) {
+            appPreferences.saveAccessToken(user.accessToken!);
+          }
+          return userDataMapper.mapToEntity(user);
         },
       );
 

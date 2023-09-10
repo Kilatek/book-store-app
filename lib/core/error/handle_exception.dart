@@ -14,6 +14,8 @@ class HandleException {
         return errorListener.onNoInternet(appExceptionWrapper, context);
       case AppExceptionType.uncaugth:
         return errorListener.onUncaugth(appExceptionWrapper, context);
+      case AppExceptionType.dioError:
+        return errorListener.onServerError(appExceptionWrapper, context);
       default:
         return errorListener.onUncaugth(appExceptionWrapper, context);
     }
