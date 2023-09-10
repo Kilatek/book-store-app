@@ -3,7 +3,6 @@ import 'package:book_store/features/author/presentation/pages/author_page.dart';
 import 'package:book_store/features/book/presentation/pages/book_page.dart';
 import 'package:book_store/features/home/presentation/bloc/tab_navigation_cubit.dart';
 import 'package:book_store/features/home/presentation/widgets/bottombar_item.dart';
-import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +13,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return BlocProvider(
       create: (_) => TabNavigationCubit(),
       child: BlocBuilder<TabNavigationCubit, int>(
