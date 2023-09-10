@@ -32,4 +32,6 @@ class AppColors {
   static Color get lightGray => const Color(0xffF7F8F8);
 
   static Color shadowColor = Colors.black87;
+
+  static Color appBgColor = const Color(0xFFF5F5F5);
 }
