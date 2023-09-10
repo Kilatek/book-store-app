@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
                           child: badges.Badge(
                             position:
                                 badges.BadgePosition.topEnd(top: -10, end: -10),
-                            badgeContent: Text(
+                            badgeContent: const Text(
                               '2',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
                           child: badges.Badge(
                             position:
                                 badges.BadgePosition.topEnd(top: -10, end: -10),
-                            badgeContent: Text(
+                            badgeContent: const Text(
                               '1',
                               style: TextStyle(color: Colors.white),
                             ),

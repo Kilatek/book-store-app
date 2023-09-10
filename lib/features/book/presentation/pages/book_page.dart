@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:book_store/core/theme/colors.dart';
 import 'package:book_store/features/home/presentation/widgets/avatar_image.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +6,10 @@ class BookPage extends StatefulWidget {
   const BookPage({Key? key}) : super(key: key);
 
   @override
-  _BookPageState createState() => _BookPageState();
+  BookPageState createState() => BookPageState();
 }
 
-class _BookPageState extends State<BookPage> {
+class BookPageState extends State<BookPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,18 +51,18 @@ class _BookPageState extends State<BookPage> {
         Container(
           width: double.infinity,
           height: 250,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(100)),
               color: primary),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
-                margin: EdgeInsets.only(left: 35, right: 15),
-                child: Text(
+                margin: const EdgeInsets.only(left: 35, right: 15),
+                child: const Text(
                   "Hi, Sangvaleap",
                   style: TextStyle(
                       color: secondary,
@@ -71,12 +70,12 @@ class _BookPageState extends State<BookPage> {
                       fontWeight: FontWeight.w600),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
-                margin: EdgeInsets.only(left: 35, right: 15),
-                child: Text(
+                margin: const EdgeInsets.only(left: 35, right: 15),
+                child: const Text(
                   "Welcome to Lifemasto!",
                   style: TextStyle(
                       color: secondary,
@@ -84,19 +83,19 @@ class _BookPageState extends State<BookPage> {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 35,
               ),
               Container(
-                  padding: EdgeInsets.only(left: 15, right: 15),
-                  child: Text(
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  child: const Text(
                     "Popular Books",
                     style: TextStyle(
                         color: secondary,
                         fontSize: 18,
                         fontWeight: FontWeight.w600),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
             ],
@@ -106,7 +105,7 @@ class _BookPageState extends State<BookPage> {
           height: 150,
           color: primary,
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: appBgColor,
                 borderRadius:
                     BorderRadius.only(topRight: Radius.circular(100))),
@@ -120,44 +119,42 @@ class _BookPageState extends State<BookPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Container(
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  child: getTopBlock(),
-                ),
-                Positioned(
-                    top: 140,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      height: 260,
-                      child: getPopularBooks(),
-                    )),
-              ],
-            ),
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                child: getTopBlock(),
+              ),
+              Positioned(
+                  top: 140,
+                  left: 0,
+                  right: 0,
+                  child: SizedBox(
+                    height: 260,
+                    child: getPopularBooks(),
+                  )),
+            ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                  padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-                  child: Text(
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+                  child: const Text(
                     "Latest Books",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Container(
-                margin: EdgeInsets.only(left: 15),
+                margin: const EdgeInsets.only(left: 15),
                 child: getLatestBooks(),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
             ],
@@ -169,7 +166,7 @@ class _BookPageState extends State<BookPage> {
 
   getPopularBooks() {
     return SingleChildScrollView(
-      padding: EdgeInsets.only(bottom: 5, left: 15),
+      padding: const EdgeInsets.only(bottom: 5, left: 15),
       scrollDirection: Axis.horizontal,
       child: Container(),
       // Row(
@@ -181,7 +178,7 @@ class _BookPageState extends State<BookPage> {
 
   getLatestBooks() {
     return SingleChildScrollView(
-      padding: EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 5),
       scrollDirection: Axis.horizontal,
       child: Container(),
       // Row(

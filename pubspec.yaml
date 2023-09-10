@@ -35,7 +35,6 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^7.3.1
   get_it: ^7.2.0
-  http: ^0.13.3
   internet_connection_checker: ^0.0.1+2
   shared_preferences: ^2.0.8
   flutter_svg: ^2.0.7
@@ -64,6 +63,9 @@ dependencies:
   rxdart: ^0.27.7
   firebase_database: ^10.2.5
   auto_route_generator: ^7.3.1
+  dio: ^5.3.2
+  provider: ^6.0.5
+  async: ^2.11.0
 
 dev_dependencies:
   flutter_test:

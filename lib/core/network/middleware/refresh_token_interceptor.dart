@@ -90,11 +90,11 @@ class RefreshTokenInterceptor extends BaseInterceptor {
   }
 
   void _onRefreshTokenError(Object? error) {
-    _queue.forEach((element) {
+    for (var element in _queue) {
       final options = element.value1;
       final handler = element.value2;
       handler.next(DioException(requestOptions: options, error: error));
-    });
+    }
   }
 
   Future<void> _requestWithNewToken({

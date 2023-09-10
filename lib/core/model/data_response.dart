@@ -11,7 +11,8 @@ class DataResponse<T> with _$DataResponse<T> {
     @JsonKey(name: 'meta') Meta? meta,
   }) = _DataResponse;
 
-  factory DataResponse.fromJson(Map<String, dynamic> json, T Function(Object?) fromJsonT) =>
+  factory DataResponse.fromJson(
+          Map<String, dynamic> json, T Function(Object?) fromJsonT) =>
       _$DataResponseFromJson(json, fromJsonT);
 }
 
@@ -22,7 +23,8 @@ class DataListResponse<T> with _$DataListResponse<T> {
     @JsonKey(name: 'meta') Meta? meta,
   }) = _DataListResponse;
 
-  factory DataListResponse.fromJson(Map<String, dynamic> json, T Function(Object?) fromJsonT) =>
+  factory DataListResponse.fromJson(
+          Map<String, dynamic> json, T Function(Object?) fromJsonT) =>
       _$DataListResponseFromJson(json, fromJsonT);
 }
 
@@ -41,5 +43,6 @@ class PageInfo with _$PageInfo {
     @JsonKey(name: 'next') int? next,
   }) = _PageInfo;
 
-  factory PageInfo.fromJson(Map<String, dynamic> json) => _$PageInfoFromJson(json);
+  factory PageInfo.fromJson(Map<String, dynamic> json) =>
+      _$PageInfoFromJson(json);
 }
