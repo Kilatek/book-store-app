@@ -56,7 +56,7 @@ abstract class ServiceModule {
       );
 
   @lazySingleton
-  FirebaseDatabase get firebaseStorage => FirebaseDatabase.instance;
+  FirebaseDatabase get firebaseDatabase => FirebaseDatabase.instance;
 
   @injectable
   InternetConnectionChecker get internetConnectionChecker =>

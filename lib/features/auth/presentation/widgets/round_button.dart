@@ -11,6 +11,7 @@ class RoundButton extends StatelessWidget {
   final double fontSize;
   final double elevation;
   final FontWeight fontWeight;
+  final bool isLoading;
 
   const RoundButton({
     super.key,
@@ -19,6 +20,7 @@ class RoundButton extends StatelessWidget {
     this.fontSize = Dimens.d15,
     this.elevation = 1,
     this.fontWeight = FontWeight.w700,
+    this.isLoading = false,
     required this.onPressed,
   });
 
@@ -56,36 +58,42 @@ class RoundButton extends StatelessWidget {
                 type == RoundButtonType.bgSGradient
             ? Colors.transparent
             : AppColors.white,
-        child: type == RoundButtonType.bgGradient ||
-                type == RoundButtonType.bgSGradient
-            ? Text(
-                title,
-                style: TextStyle(
+        child: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(
                   color: AppColors.white,
-                  fontSize: fontSize,
-                  fontWeight: fontWeight,
                 ),
               )
-            : ShaderMask(
-                blendMode: BlendMode.srcIn,
-                shaderCallback: (bounds) {
-                  return LinearGradient(
-                    colors: AppColors.primaryG,
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ).createShader(
-                    Rect.fromLTRB(0, 0, bounds.width, bounds.height),
-                  );
-                },
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: AppColors.primaryColor1,
-                    fontSize: fontSize,
-                    fontWeight: fontWeight,
+            : type == RoundButtonType.bgGradient ||
+                    type == RoundButtonType.bgSGradient
+                ? Text(
+                    title,
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontSize: fontSize,
+                      fontWeight: fontWeight,
+                    ),
+                  )
+                : ShaderMask(
+                    blendMode: BlendMode.srcIn,
+                    shaderCallback: (bounds) {
+                      return LinearGradient(
+                        colors: AppColors.primaryG,
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ).createShader(
+                        Rect.fromLTRB(0, 0, bounds.width, bounds.height),
+                      );
+                    },
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        color: AppColors.primaryColor1,
+                        fontSize: fontSize,
+                        fontWeight: fontWeight,
+                      ),
+                    ),
                   ),
-                ),
-              ),
       ),
     );
   }

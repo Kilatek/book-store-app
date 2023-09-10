@@ -2,7 +2,6 @@ import 'package:book_store/core/base/base_bloc.dart';
 import 'package:book_store/core/base/base_page.dart';
 import 'package:book_store/core/error/app_exception_wrapper.dart';
 import 'package:book_store/core/error/error_listener.dart';
-import 'package:book_store/core/util/view_utils.dart';
 import 'package:flutter/material.dart';
 
 mixin ErrorListenerMixin<T extends StatefulWidget, B extends BaseBloc>
@@ -10,19 +9,13 @@ mixin ErrorListenerMixin<T extends StatefulWidget, B extends BaseBloc>
   @override
   void onNoInternet(
     AppExceptionWrapper appExceptionWrapper,
-    BuildContext context,
   ) {
-    ViewUtils.showAppSnackBar(
-      context,
-      appExceptionWrapper.appError.message,
-      backgroundColor: Colors.red,
-    );
+    navigator.showErrorSnackBar(message: appExceptionWrapper.appError.message);
   }
 
   @override
   void onUncaugth(
     AppExceptionWrapper appExceptionWrapper,
-    BuildContext context,
   ) {
     logE(appExceptionWrapper.toString());
   }
@@ -30,12 +23,7 @@ mixin ErrorListenerMixin<T extends StatefulWidget, B extends BaseBloc>
   @override
   void onServerError(
     AppExceptionWrapper appExceptionWrapper,
-    BuildContext context,
   ) {
-    ViewUtils.showAppSnackBar(
-      context,
-      appExceptionWrapper.appError.message,
-      backgroundColor: Colors.red,
-    );
+    navigator.showErrorSnackBar(message: appExceptionWrapper.appError.message);
   }
 }

@@ -31,7 +31,6 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
         emailAddress: _inputConverter.email(event.emailStr),
       ),
     );
-    print(state.emailAddress);
   }
 
   Future<void> onPasswordChanged(
@@ -68,6 +67,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
           emit(
             state.copyWith(
               user: auth,
+              isSubmitting: false,
             ),
           );
         },

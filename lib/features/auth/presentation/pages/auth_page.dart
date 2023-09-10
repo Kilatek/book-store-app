@@ -26,6 +26,7 @@ class _AuthPageState extends BasePageState<AuthPage, AuthBloc> {
 
   @override
   void initState() {
+    super.initState();
     _emailControler.addListener(() {
       bloc.add(EmailChanged(_emailControler.text));
     });
@@ -33,8 +34,22 @@ class _AuthPageState extends BasePageState<AuthPage, AuthBloc> {
     _passwordControler.addListener(() {
       bloc.add(PasswordChanged(_passwordControler.text));
     });
+  }
 
-    super.initState();
+  @override
+  Widget buildPageListener({required Widget child}) {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthBloc, AuthState>(
+          listenWhen: (previous, current) => current.user != null,
+          listener: (context, state) {
+            logD('user: ${state.user}');
+            // navigator.replace(const MainRoute());
+          },
+        ),
+      ],
+      child: child,
+    );
   }
 
   @override
@@ -141,14 +156,19 @@ class _AuthPageState extends BasePageState<AuthPage, AuthBloc> {
                       ],
                     ),
                     const Spacer(),
-                    RoundButton(
-                      title: 'Login',
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() == true) {
-                          bloc.add(
-                            const SignInWithEmailAndPasswordPressed(),
-                          );
-                        }
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        return RoundButton(
+                          isLoading: state.isSubmitting,
+                          title: 'Login',
+                          onPressed: () {
+                            if (_formKey.currentState?.validate() == true) {
+                              bloc.add(
+                                const SignInWithEmailAndPasswordPressed(),
+                              );
+                            }
+                          },
+                        );
                       },
                     ),
                     SizedBox(

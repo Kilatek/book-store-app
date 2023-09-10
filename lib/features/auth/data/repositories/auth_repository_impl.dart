@@ -35,6 +35,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }) =>
       handleCommon(
         () async {
+          await appPreferences.clearCurrentUserData();
           final user = await remoteDataSource.login(
             email: email,
             password: password,

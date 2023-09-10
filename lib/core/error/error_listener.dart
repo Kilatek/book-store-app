@@ -1,12 +1,8 @@
 import 'package:book_store/core/error/app_exception_wrapper.dart';
-import 'package:flutter/material.dart';
 
 abstract class ErrorListener {
-  void onNoInternet(
-      AppExceptionWrapper appExceptionWrapper, BuildContext context);
-  void onUncaugth(
-      AppExceptionWrapper appExceptionWrapper, BuildContext context);
+  void onNoInternet(AppExceptionWrapper appExceptionWrapper);
+  void onUncaugth(AppExceptionWrapper appExceptionWrapper);
 
-  void onServerError(
-      AppExceptionWrapper appExceptionWrapper, BuildContext context);
+  void onServerError(AppExceptionWrapper appExceptionWrapper);
 }
