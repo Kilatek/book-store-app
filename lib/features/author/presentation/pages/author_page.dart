@@ -5,10 +5,10 @@ class AuthorPage extends StatefulWidget {
   const AuthorPage({Key? key}) : super(key: key);
 
   @override
-  _AuthorPageState createState() => _AuthorPageState();
+  AuthorPageState createState() => AuthorPageState();
 }
 
-class _AuthorPageState extends State<AuthorPage> {
+class AuthorPageState extends State<AuthorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,8 +36,6 @@ class _AuthorPageState extends State<AuthorPage> {
             ],
           ),
         ),
-        body: Container(
-          child: Text('Author'),
-        ));
+        body: const Text('Author'));
   }
 }
