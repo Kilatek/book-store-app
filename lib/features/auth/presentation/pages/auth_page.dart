@@ -8,6 +8,7 @@ import 'package:book_store/features/auth/presentation/bloc/auth_event.dart';
 import 'package:book_store/features/auth/presentation/bloc/auth_state.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_button.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_textfield.dart';
+import 'package:book_store/navigation/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,7 +45,7 @@ class _AuthPageState extends BasePageState<AuthPage, AuthBloc> {
           listenWhen: (previous, current) => current.user != null,
           listener: (context, state) {
             logD('user: ${state.user}');
-            // navigator.replace(const MainRoute());
+            navigator.replace(const HomeRoute());
           },
         ),
       ],
@@ -62,11 +63,11 @@ class _AuthPageState extends BasePageState<AuthPage, AuthBloc> {
   @override
   Widget buildPage(BuildContext context) {
     final media = MediaQuery.sizeOf(context);
-    return GestureDetector(
-      onTap: () => ViewUtils.hideKeyboard(context),
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: GestureDetector(
+        onTap: () => ViewUtils.hideKeyboard(context),
+        child: SingleChildScrollView(
           child: SafeArea(
             child: Container(
               height: media.height * 0.9,
