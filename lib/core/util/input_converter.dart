@@ -7,12 +7,12 @@ import 'package:injectable/injectable.dart';
 
 @LazySingleton()
 class InputConverter {
-  Either<AppError, String> email(String input) {
+  Result<String> email(String input) {
     const emailRegex =
         r"""^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+""";
     try {
       if (input.isBlank) throw ValidateEmptyException();
-      if (RegExp(emailRegex).hasMatch(input)) {
+      if (!RegExp(emailRegex).hasMatch(input)) {
         throw ValidateWronEmailException();
       }
       return Right(input);
@@ -21,7 +21,7 @@ class InputConverter {
     }
   }
 
-  Either<AppError, String> password(String input) {
+  Result<String> password(String input) {
     try {
       if (input.isBlank) throw ValidateEmptyException();
       if (input.length < 6) throw ValidateWronPasswordException();

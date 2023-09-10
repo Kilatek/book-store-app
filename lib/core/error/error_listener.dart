@@ -6,4 +6,7 @@ abstract class ErrorListener {
       AppExceptionWrapper appExceptionWrapper, BuildContext context);
   void onUncaugth(
       AppExceptionWrapper appExceptionWrapper, BuildContext context);
+
+  void onServerError(
+      AppExceptionWrapper appExceptionWrapper, BuildContext context);
 }

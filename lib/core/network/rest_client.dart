@@ -1,4 +1,3 @@
-import 'package:book_store/core/model/data_response.dart';
 import 'package:book_store/features/auth/data/models/auth_response_data.dart';
 import 'package:book_store/features/auth/data/models/login_request_data.dart';
 import 'package:retrofit/retrofit.dart';
@@ -10,8 +9,8 @@ part 'rest_client.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @GET('/login')
-  Future<DataResponse<AuthResponseData>> login(
+  @POST('/login')
+  Future<AuthResponseData> login(
     @Body() LoginRequesData loginRequesData,
   );
 }

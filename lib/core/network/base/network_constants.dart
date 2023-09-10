@@ -7,5 +7,5 @@ class NetworkConstants {
   static const basicAuthorization = 'Authorization';
   static const bearer = 'Bearer';
 
-  static String get appApiBaseUrl => 'http://0.0.0.0/api';
+  static String get appApiBaseUrl => 'http://159.223.95.179';
 }

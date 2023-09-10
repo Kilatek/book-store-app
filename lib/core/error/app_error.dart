@@ -28,6 +28,7 @@ class AppError {
 }
 
 enum AppExceptionType {
+  dioError,
   uncaugth,
   noInternet,
   serverError,

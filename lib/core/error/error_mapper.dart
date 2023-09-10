@@ -1,13 +1,21 @@
 import 'package:book_store/core/error/app_error.dart';
 import 'package:book_store/core/error/exceptions.dart';
+import 'package:dio/dio.dart';
 
 class ErrorMapperFactory {
   static AppError map(Object error) {
     switch (error.runtimeType) {
+      case DioException:
+        final message = (error as DioException).response?.data['message'];
+        return AppError(
+          appExceptionType: AppExceptionType.dioError,
+          message: message ?? (error).response?.statusMessage,
+          error: error,
+        );
       case NotInterNetException:
         return AppError(
           appExceptionType: AppExceptionType.noInternet,
-          message: AppExceptionType.noInternet.toString(),
+          message: 'No Internet Connection',
           error: error,
         );
       case ServerException:
@@ -31,19 +39,19 @@ class ErrorMapperFactory {
       case ValidateEmptyException:
         return AppError(
           appExceptionType: AppExceptionType.validateEmpty,
-          message: error.toString(),
+          message: 'Value not Empty',
           error: error,
         );
       case ValidateWronEmailException:
         return AppError(
           appExceptionType: AppExceptionType.validateWrongEmail,
-          message: error.toString(),
+          message: 'Wrong email format',
           error: error,
         );
       case ValidateWronPasswordException:
         return AppError(
           appExceptionType: AppExceptionType.validateWrongPassword,
-          message: error.toString(),
+          message: 'Password must be at least 6 characters',
           error: error,
         );
       default:

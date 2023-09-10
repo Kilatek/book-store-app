@@ -28,9 +28,10 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
   ) async {
     emit(
       state.copyWith(
-        emailAddress: event.emailStr,
+        emailAddress: _inputConverter.email(event.emailStr),
       ),
     );
+    print(state.emailAddress);
   }
 
   Future<void> onPasswordChanged(
@@ -39,7 +40,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
   ) async {
     emit(
       state.copyWith(
-        password: event.passwordStr,
+        password: _inputConverter.password(event.passwordStr),
       ),
     );
   }
@@ -48,8 +49,8 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
     SignInWithEmailAndPasswordPressed event,
     Emitter<AuthState> emit,
   ) async {
-    final isPasswordValid = _inputConverter.password(state.password).isRight();
-    final isEmailValid = _inputConverter.password(state.emailAddress).isRight();
+    final isPasswordValid = state.password.isRight();
+    final isEmailValid = state.emailAddress.isRight();
     if (isEmailValid && isPasswordValid) {
       emit(
         state.copyWith(
@@ -59,8 +60,8 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
       await runBlocCatching<User>(
         _loginUsecase.call(
           Params(
-            email: state.emailAddress,
-            password: state.password,
+            email: state.emailAddress.getOrElse(() => ''),
+            password: state.password.getOrElse(() => ''),
           ),
         ),
         doOnSuccess: (auth) {
