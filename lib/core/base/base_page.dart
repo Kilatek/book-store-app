@@ -20,7 +20,6 @@ abstract class BasePageState<T extends StatefulWidget, B extends BaseBloc>
           current.appExceptionWrapper != null,
       listener: (context, state) => handleException.handleException(
         state.appExceptionWrapper!,
-        context,
         this,
       ),
       child: child,

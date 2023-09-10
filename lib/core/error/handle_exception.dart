@@ -1,23 +1,21 @@
 import 'package:book_store/core/error/app_error.dart';
 import 'package:book_store/core/error/app_exception_wrapper.dart';
 import 'package:book_store/core/error/error_listener.dart';
-import 'package:flutter/material.dart';
 
 class HandleException {
   Future<void> handleException(
     AppExceptionWrapper appExceptionWrapper,
-    BuildContext context,
     ErrorListener errorListener,
   ) async {
     switch (appExceptionWrapper.appError.appExceptionType) {
       case AppExceptionType.noInternet:
-        return errorListener.onNoInternet(appExceptionWrapper, context);
+        return errorListener.onNoInternet(appExceptionWrapper);
       case AppExceptionType.uncaugth:
-        return errorListener.onUncaugth(appExceptionWrapper, context);
+        return errorListener.onUncaugth(appExceptionWrapper);
       case AppExceptionType.dioError:
-        return errorListener.onServerError(appExceptionWrapper, context);
+        return errorListener.onServerError(appExceptionWrapper);
       default:
-        return errorListener.onUncaugth(appExceptionWrapper, context);
+        return errorListener.onUncaugth(appExceptionWrapper);
     }
   }
 }

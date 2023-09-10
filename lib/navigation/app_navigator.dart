@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:book_store/core/util/log_mixin.dart';
+import 'package:book_store/core/util/view_utils.dart';
 import 'package:book_store/navigation/app_routes.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
@@ -91,5 +93,14 @@ class AppNavigator with LogMixin {
 
   bool removeLast() {
     return appRouter.removeLast();
+  }
+
+  void showErrorSnackBar({required String message, Duration? duration}) {
+    ViewUtils.showAppSnackBar(
+      appRouter.navigatorKey.currentContext!,
+      message,
+      duration: duration,
+      backgroundColor: Colors.red,
+    );
   }
 }

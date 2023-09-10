@@ -42,13 +42,13 @@ class ErrorMapperFactory {
           message: 'Value not Empty',
           error: error,
         );
-      case ValidateWronEmailException:
+      case ValidateWrongEmailException:
         return AppError(
           appExceptionType: AppExceptionType.validateWrongEmail,
           message: 'Wrong email format',
           error: error,
         );
-      case ValidateWronPasswordException:
+      case ValidateWrongPasswordException:
         return AppError(
           appExceptionType: AppExceptionType.validateWrongPassword,
           message: 'Password must be at least 6 characters',
