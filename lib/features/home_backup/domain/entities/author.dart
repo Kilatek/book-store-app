@@ -12,6 +12,7 @@ class Author with _$Author {
     @Default(Author.defaultNationality) String nationality,
     @Default(Author.defaultCreatedAt) String createdAt,
     @Default(Author.defaultUpdatedAt) String updatedAt,
+    @Default(Author.defaultImage) String image,
   }) = _Author;
 
   static const defaultId = '';
@@ -21,4 +22,5 @@ class Author with _$Author {
   static const defaultNationality = '';
   static const defaultCreatedAt = '';
   static const defaultUpdatedAt = '';
+  static const defaultImage = '';
 }

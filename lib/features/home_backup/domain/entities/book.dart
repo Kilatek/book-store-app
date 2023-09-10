@@ -14,6 +14,7 @@ class Book with _$Book {
     @Default(Book.defaultPrice) double price,
     @Default(Book.defaultCreatedAt) String createdAt,
     @Default(Book.defaultUpdatedAt) String updatedAt,
+    @Default(Book.defaultImage) String image,
   }) = _Book;
 
   static const defaultId = '';
@@ -24,4 +25,5 @@ class Book with _$Book {
   static const defaultPrice = 0.0;
   static const defaultCreatedAt = '';
   static const defaultUpdatedAt = '';
+  static const defaultImage = '';
 }
