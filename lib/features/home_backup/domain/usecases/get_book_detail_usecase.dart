@@ -8,23 +8,23 @@ import 'package:injectable/injectable.dart';
 import '../../../../core/usecases/usecase.dart';
 
 @Injectable()
-class GetBookDetailUsecase implements UseCase<Book, Params> {
+class GetBookDetailUsecase implements UseCase<Book, GetBookDetailParams> {
   final HomeRepository repository;
 
   GetBookDetailUsecase(this.repository);
 
   @override
-  Future<Either<AppError, Book>> call(Params params) {
+  Future<Either<AppError, Book>> call(GetBookDetailParams params) {
     return repository.getBookById(
       params.id,
     );
   }
 }
 
-class Params extends Equatable {
+class GetBookDetailParams extends Equatable {
   final String id;
 
-  const Params({required this.id});
+  const GetBookDetailParams({required this.id});
 
   @override
   List<Object?> get props => [id];

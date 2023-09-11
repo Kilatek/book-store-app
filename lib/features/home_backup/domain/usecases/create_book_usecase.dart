@@ -17,9 +17,9 @@ class CreateBookUsecase implements UseCase<Unit, CreateBookParams> {
   Future<Either<AppError, Unit>> call(CreateBookParams params) {
     return repository.createBook(
       BookRequestData(
-        firstName: params.firstName,
-        lastName: params.lastName,
-        birthDate: params.birthDate,
+        name: params.name,
+        description: params.description,
+        publicationDate: params.publicationDate,
         price: params.price,
         authorId: params.authorId,
       ),
@@ -28,25 +28,25 @@ class CreateBookUsecase implements UseCase<Unit, CreateBookParams> {
 }
 
 class CreateBookParams extends Equatable {
-  final String firstName;
-  final String lastName;
-  final String birthDate;
+  final String name;
+  final String description;
+  final String publicationDate;
   final double price;
   final String authorId;
 
   const CreateBookParams({
-    required this.firstName,
-    required this.lastName,
-    required this.birthDate,
+    required this.name,
+    required this.description,
+    required this.publicationDate,
     required this.price,
     required this.authorId,
   });
 
   @override
   List<Object?> get props => [
-        firstName,
-        lastName,
-        birthDate,
+        name,
+        description,
+        publicationDate,
         price,
         authorId,
       ];

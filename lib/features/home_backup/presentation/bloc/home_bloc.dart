@@ -9,11 +9,14 @@ import 'package:book_store/features/home_backup/domain/entities/book.dart';
 import 'package:book_store/features/home_backup/domain/usecases/create_author_usecase.dart';
 import 'package:book_store/features/home_backup/domain/usecases/create_book_usecase.dart';
 import 'package:book_store/features/home_backup/domain/usecases/delete_author_usecase.dart';
+import 'package:book_store/features/home_backup/domain/usecases/delete_book_usecase.dart';
 import 'package:book_store/features/home_backup/domain/usecases/get_action_stream_usecase.dart';
 import 'package:book_store/features/home_backup/domain/usecases/get_author_detail_usecase.dart';
 import 'package:book_store/features/home_backup/domain/usecases/get_authors_usecase.dart';
+import 'package:book_store/features/home_backup/domain/usecases/get_book_detail_usecase.dart';
 import 'package:book_store/features/home_backup/domain/usecases/get_books_usecase.dart';
 import 'package:book_store/features/home_backup/domain/usecases/update_author_usecase.dart';
+import 'package:book_store/features/home_backup/domain/usecases/update_book_usecase.dart';
 import 'package:book_store/navigation/app_routes.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,6 +37,9 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     this.getAuthorDetailUsecase,
     this.updateAuthorUsecase,
     this.deleteAuthorUsecase,
+    this.getBookDetailUsecase,
+    this.updateBookUsecase,
+    this.deleteBookUsecase,
   ) : super(HomeState.initial()) {
     on<HomeEventInital>(
       onHomeEventInital,
@@ -120,6 +126,20 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
       onDeleteAuthorPressed,
       transformer: log(),
     );
+
+    on<CreateBookPressed>(
+      onCreateBookPressed,
+      transformer: log(),
+    );
+    on<UpdateBookPressed>(
+      onUpdateBookPressed,
+      transformer: log(),
+    );
+
+    on<DeleteBookPressed>(
+      onDeleteBookPressed,
+      transformer: log(),
+    );
   }
 
   final GetBooksUsecase getBooksUsecase;
@@ -130,13 +150,16 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   final GetAuthorDetailUsecase getAuthorDetailUsecase;
   final UpdateAuthorUsecase updateAuthorUsecase;
   final DeleteAuthorUsecase deleteAuthorUsecase;
+  final GetBookDetailUsecase getBookDetailUsecase;
+  final UpdateBookUsecase updateBookUsecase;
+  final DeleteBookUsecase deleteBookUsecase;
   final InputConverter _inputConverter;
 
   Future<void> onHomeEventInital(
     HomeEventInital event,
     Emitter<HomeState> emit,
   ) async {
-    add(const HomeEvent.updateAuthors());
+    add(const HomeEvent.updateAuthors(false));
     add(const HomeEvent.updateBooks());
     getActionStreamUsecase.call(const Params(ref: 'books')).listen((event) {
       event.fold(
@@ -152,12 +175,33 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     BookEventInital event,
     Emitter<HomeState> emit,
   ) async {
-    add(const HomeEvent.updateAuthors());
-    emit(
-      state.copyWith(
-        pageType: event.pageType,
-      ),
-    );
+    if (event.pageType == PageType.update) {
+      add(const HomeEvent.updateAuthors(false));
+      await runBlocCatching<Book>(
+        getBookDetailUsecase.call(GetBookDetailParams(id: event.id)),
+        doOnSuccess: (book) {
+          emit(
+            state.copyWith(
+              pageType: event.pageType,
+              bookName: _inputConverter.defaultValidate(book.name),
+              bookDescription:
+                  _inputConverter.defaultValidate(book.description),
+              bookPrice: _inputConverter.defaultValidate(book.price.toString()),
+              bookPublicationDate:
+                  _inputConverter.defaultValidate(book.publicationDate),
+              bookAuthor: book.author,
+            ),
+          );
+        },
+      );
+    } else {
+      add(const HomeEvent.updateAuthors(true));
+      emit(
+        state.copyWith(
+          pageType: event.pageType,
+        ),
+      );
+    }
   }
 
   Future<void> onAuthorEventInitial(
@@ -208,10 +252,9 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   ) async {
     if (state.tabIndex == 0) {
       await navigator.push(BookRoute(id: null));
-      add(const HomeEvent.updateBooks());
     } else {
-      await navigator.push(AuthorRoute(id: null));
-      add(const HomeEvent.updateAuthors());
+      final isUpdate = await navigator.push(AuthorRoute(id: null));
+      if (isUpdate == true) add(const HomeEvent.updateAuthors(false));
     }
   }
 
@@ -240,6 +283,9 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
           emit(
             state.copyWith(
               authors: authors,
+              bookAuthor: event.isAuthorInitial
+                  ? authors.firstOrNull
+                  : state.bookAuthor,
             ),
           );
         },
@@ -329,7 +375,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   ) async {
     emit(
       state.copyWith(
-        bookPublicationDate: _inputConverter.defaultValidate(event.input),
+        bookPrice: _inputConverter.price(event.input),
       ),
     );
   }
@@ -384,7 +430,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
           );
           navigator.showSuccessSnackBar(message: 'Create Author Success');
           Future.delayed(const Duration(seconds: 2), () {
-            navigator.pop();
+            navigator.pop(result: true);
           });
         },
         doOnError: (_) {
@@ -439,7 +485,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
           );
           navigator.showSuccessSnackBar(message: 'Update Author Success');
           Future.delayed(const Duration(seconds: 2), () {
-            navigator.pop();
+            navigator.pop(result: true);
           });
         },
         doOnError: (_) {
@@ -480,7 +526,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
           ),
         );
         navigator.showSuccessSnackBar(message: 'Delete Author Success');
-        navigator.pop();
+        navigator.pop(result: true);
       },
       doOnError: (_) {
         emit(
@@ -489,6 +535,149 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
           ),
         );
       },
+      isHandleLoading: false,
+    );
+  }
+
+  Future<void> onCreateBookPressed(
+    CreateBookPressed event,
+    Emitter<HomeState> emit,
+  ) async {
+    final isVail = [
+      state.bookName.isRight(),
+      state.bookDescription.isRight(),
+      state.bookPublicationDate.isRight(),
+      state.bookPrice.isRight(),
+      state.bookAuthor != null,
+    ].every((element) => element == true);
+
+    if (isVail) {
+      emit(
+        state.copyWith(
+          isSubmitting: true,
+        ),
+      );
+      await runBlocCatching<Unit>(
+        createBookUsecase.call(
+          CreateBookParams(
+            name: state.bookName.getOrElse(() => ''),
+            description: state.bookDescription.getOrElse(() => ''),
+            publicationDate: state.bookPublicationDate.getOrElse(() => ''),
+            price: double.tryParse(state.bookPrice.getOrElse(() => "0")) ?? 0.0,
+            authorId: state.bookAuthor!.id,
+          ),
+        ),
+        doOnSuccess: (auth) {
+          emit(
+            state.copyWith(
+              isSubmitting: false,
+            ),
+          );
+          navigator.showSuccessSnackBar(message: 'Create Book Success');
+          Future.delayed(const Duration(seconds: 2), () {
+            navigator.pop(result: true);
+          });
+        },
+        doOnError: (_) {
+          emit(
+            state.copyWith(
+              isSubmitting: false,
+            ),
+          );
+        },
+        isHandleLoading: false,
+      );
+    }
+  }
+
+  Future<void> onUpdateBookPressed(
+    UpdateBookPressed event,
+    Emitter<HomeState> emit,
+  ) async {
+    final isVail = [
+      state.bookName.isRight(),
+      state.bookDescription.isRight(),
+      state.bookPublicationDate.isRight(),
+      state.bookPrice.isRight(),
+      state.bookAuthor != null,
+    ].every((element) => element == true);
+    if (isVail) {
+      emit(
+        state.copyWith(
+          isSubmitting: true,
+        ),
+      );
+      await runBlocCatching<Unit>(
+        updateBookUsecase.call(
+          UpdateBookParams(
+            id: event.id,
+            name: state.bookName.getOrElse(() => ''),
+            description: state.bookDescription.getOrElse(() => ''),
+            publicationDate: state.bookPublicationDate.getOrElse(() => ''),
+            price: double.tryParse(state.bookPrice.getOrElse(() => "0")) ?? 0.0,
+            authorId: state.bookAuthor!.id,
+          ),
+        ),
+        doOnSuccess: (auth) {
+          emit(
+            state.copyWith(
+              isSubmitting: false,
+            ),
+          );
+          navigator.showSuccessSnackBar(message: 'Update Book Success');
+          Future.delayed(const Duration(seconds: 2), () {
+            navigator.pop(result: true);
+          });
+        },
+        doOnError: (_) {
+          emit(
+            state.copyWith(
+              isSubmitting: false,
+            ),
+          );
+        },
+        isHandleLoading: false,
+      );
+    }
+  }
+
+  Future<void> onDeleteBookPressed(
+    DeleteBookPressed event,
+    Emitter<HomeState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        isSubmitting: true,
+      ),
+    );
+    await runBlocCatching<Unit>(
+      deleteBookUsecase.call(
+        DeleteBookParams(
+          id: event.id,
+          name: state.bookName.getOrElse(() => ''),
+          description: state.bookDescription.getOrElse(() => ''),
+          publicationDate: state.bookPublicationDate.getOrElse(() => ''),
+          price: double.tryParse(state.bookPrice.getOrElse(() => "0")) ?? 0.0,
+          authorId: state.bookAuthor!.id,
+        ),
+      ),
+      doOnSuccess: (auth) {
+        emit(
+          state.copyWith(
+            isSubmitting: false,
+          ),
+        );
+        navigator.showSuccessSnackBar(message: 'Delete Book Success');
+        navigator.pop(result: true);
+      },
+      doOnError: (_) {
+        emit(
+          state.copyWith(
+            isSubmitting: false,
+          ),
+        );
+      },
+      isHandleLoading: false,
     );
   }
 }

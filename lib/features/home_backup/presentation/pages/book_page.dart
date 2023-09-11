@@ -4,11 +4,13 @@ import 'package:book_store/core/dimens/dimens.dart';
 import 'package:book_store/core/theme/app_colors.dart';
 import 'package:book_store/core/util/view_utils.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_button.dart';
+import 'package:book_store/features/auth/presentation/widgets/round_dropdown.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_textfield.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_bloc.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_event.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_state.dart';
 import 'package:book_store/navigation/app_routes.dart';
+import 'package:book_store/navigation/popup/app_popup_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,9 +48,12 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
     _price.addListener(() {
       bloc.add(HomeEvent.bookPriceChanged(_price.text));
     });
-    bloc.add(HomeEvent.bookInitial(
-      widget.id != null ? PageType.update : PageType.add,
-    ));
+    bloc.add(
+      HomeEvent.bookInitial(
+        widget.id != null ? PageType.update : PageType.add,
+        widget.id ?? '',
+      ),
+    );
   }
 
   @override
@@ -119,6 +124,40 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
             fontWeight: FontWeight.w700,
           ),
         ),
+        actions: [
+          if (widget.id != null)
+            InkWell(
+              onTap: () async {
+                await navigator.showAdaptiveDialog(
+                  appPopupInfo: AppPopupInfo.confirmDialog(
+                    message: 'Are you sure you want to delete?',
+                    title: 'Delete Book',
+                    onPressed: Func0(() {
+                      bloc.add(HomeEvent.deleteBookPressed(widget.id ?? ''));
+                    }),
+                  ),
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.all(
+                  Dimens.d8,
+                ),
+                height: Dimens.d40,
+                width: Dimens.d40,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: AppColors.lightGray,
+                  borderRadius: BorderRadius.circular(
+                    Dimens.d10,
+                  ),
+                ),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.red,
+                ),
+              ),
+            )
+        ],
       ),
       body: GestureDetector(
         onTap: () => ViewUtils.hideKeyboard(context),
@@ -219,27 +258,38 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                     SizedBox(
                       height: media.width * 0.04,
                     ),
-                    BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-                      return RoundTextField(
-                        hitText: 'Author',
-                        icon: "assets/img/user_text.png",
-                        rigtIcon: TextButton(
-                          onPressed: () {},
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: Dimens.d20,
-                            height: Dimens.d20,
-                            child: Image.asset(
-                              "assets/img/p_down.png",
-                              width: Dimens.d20,
-                              height: Dimens.d20,
-                              fit: BoxFit.contain,
-                              color: AppColors.gray,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
+                    BlocBuilder<HomeBloc, HomeState>(
+                        buildWhen: (previous, current) =>
+                            previous.authors != current.authors &&
+                                current.authors.isNotEmpty ||
+                            current.bookAuthor != null,
+                        builder: (context, state) {
+                          final items = state.authors
+                              .map((e) =>
+                                  '${e.firstName} ${e.lastName} - ${e.birthDate}')
+                              .toList();
+                          if (items.isEmpty) return Container();
+                          String initilalValue = items.first;
+                          if (state.bookAuthor != null) {
+                            initilalValue =
+                                '${state.bookAuthor?.firstName} ${state.bookAuthor?.lastName} - ${state.bookAuthor?.birthDate}';
+                          }
+
+                          return RoundDropDown(
+                            value: initilalValue,
+                            hitText: 'Author',
+                            icon: "assets/img/user_text.png",
+                            items: items,
+                            onChanged: (value) {
+                              final (_, index) = value;
+                              bloc.add(
+                                HomeEvent.bookAuthorChanged(
+                                  state.authors[index],
+                                ),
+                              );
+                            },
+                          );
+                        }),
                     SizedBox(
                       height: media.width * 0.02,
                     ),
@@ -256,7 +306,9 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                                       const HomeEvent.createBookPressed(),
                                     )
                                   : bloc.add(
-                                      const HomeEvent.updateBookPressed(),
+                                      HomeEvent.updateBookPressed(
+                                        widget.id ?? '',
+                                      ),
                                     );
                             }
                           },
