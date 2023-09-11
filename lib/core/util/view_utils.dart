@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 class ViewUtils {
   const ViewUtils._();
-  static const _defaultSnackBarDuration = Duration(seconds: 3);
+  static const _defaultSnackBarDuration = Duration(seconds: 2);
 
   static void showAppSnackBar(
     BuildContext context,

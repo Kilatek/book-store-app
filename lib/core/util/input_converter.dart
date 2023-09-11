@@ -30,4 +30,13 @@ class InputConverter {
       return Left(ErrorMapperFactory.map(e));
     }
   }
+
+  Result<String> defaultValidate(String input) {
+    try {
+      if (input.isBlank) throw ValidateEmptyException();
+      return Right(input);
+    } catch (e) {
+      return Left(ErrorMapperFactory.map(e));
+    }
+  }
 }

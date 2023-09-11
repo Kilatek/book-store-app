@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:book_store/features/auth/presentation/pages/auth_page.dart';
 import 'package:book_store/features/auth/presentation/pages/splash_page.dart';
@@ -7,6 +8,8 @@ import 'package:book_store/features/home_backup/presentation/pages/author_page.d
 import 'package:book_store/features/home_backup/presentation/pages/book_page.dart';
 
 part 'app_routes.gr.dart';
+
+enum PageType { add, update }
 
 @AutoRouterConfig(replaceInRouteName: 'Page,Route')
 @LazySingleton()
@@ -19,6 +22,7 @@ class AppRouter extends _$AppRouter {
           page: AuthRoute.page,
         ),
         AutoRoute(
+          initial: true,
           page: HomeRoute.page,
         ),
         AutoRoute(
@@ -28,7 +32,6 @@ class AppRouter extends _$AppRouter {
           page: BookRoute.page,
         ),
         AutoRoute(
-          initial: true,
           page: AuthorRoute.page,
         ),
       ];

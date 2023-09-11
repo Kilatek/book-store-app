@@ -8,13 +8,13 @@ import 'package:injectable/injectable.dart';
 import '../../../../core/usecases/usecase.dart';
 
 @Injectable()
-class DeleteAuthorUsecase implements UseCase<Unit, Params> {
+class DeleteAuthorUsecase implements UseCase<Unit, DeleteAuthorParams> {
   final HomeRepository repository;
 
   DeleteAuthorUsecase(this.repository);
 
   @override
-  Future<Either<AppError, Unit>> call(Params params) {
+  Future<Either<AppError, Unit>> call(DeleteAuthorParams params) {
     return repository.deleteAuthor(
       params.id,
       AuthorRequestData(
@@ -27,14 +27,14 @@ class DeleteAuthorUsecase implements UseCase<Unit, Params> {
   }
 }
 
-class Params extends Equatable {
+class DeleteAuthorParams extends Equatable {
   final String id;
   final String firstName;
   final String lastName;
   final String birthDate;
   final String nationality;
 
-  const Params({
+  const DeleteAuthorParams({
     required this.id,
     required this.firstName,
     required this.lastName,

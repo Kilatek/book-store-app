@@ -8,13 +8,13 @@ import 'package:injectable/injectable.dart';
 import '../../../../core/usecases/usecase.dart';
 
 @Injectable()
-class CreateAuthorUsecase implements UseCase<Unit, Params> {
+class CreateAuthorUsecase implements UseCase<Unit, CreateAuthorParams> {
   final HomeRepository repository;
 
   CreateAuthorUsecase(this.repository);
 
   @override
-  Future<Either<AppError, Unit>> call(Params params) {
+  Future<Either<AppError, Unit>> call(CreateAuthorParams params) {
     return repository.createAuthor(
       AuthorRequestData(
         firstName: params.firstName,
@@ -26,13 +26,13 @@ class CreateAuthorUsecase implements UseCase<Unit, Params> {
   }
 }
 
-class Params extends Equatable {
+class CreateAuthorParams extends Equatable {
   final String firstName;
   final String lastName;
   final String birthDate;
   final String nationality;
 
-  const Params({
+  const CreateAuthorParams({
     required this.firstName,
     required this.lastName,
     required this.birthDate,

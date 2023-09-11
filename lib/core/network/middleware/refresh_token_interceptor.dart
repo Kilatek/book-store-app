@@ -1,13 +1,13 @@
-import 'dart:collection';
+// import 'dart:collection';
 import 'dart:io';
 
 import 'package:book_store/core/error/exceptions.dart';
 import 'package:book_store/core/network/middleware/base_interceptor.dart';
-import 'package:book_store/core/network/base/dio_builder.dart';
-import 'package:book_store/core/network/base/network_constants.dart';
+// import 'package:book_store/core/network/base/dio_builder.dart';
+// import 'package:book_store/core/network/base/network_constants.dart';
 import 'package:book_store/core/network/middleware/refresh_token_api_service.dart';
 import 'package:book_store/core/preference/app_preferences.dart';
-import 'package:dartz/dartz.dart';
+// import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
@@ -21,8 +21,8 @@ class RefreshTokenInterceptor extends BaseInterceptor {
   final AppPreferences appPreferences;
   final RefreshTokenApiService refreshTokenService;
 
-  var _isRefreshing = false;
-  final _queue = Queue<Tuple2<RequestOptions, ErrorInterceptorHandler>>();
+  // var _isRefreshing = false;
+  // final _queue = Queue<Tuple2<RequestOptions, ErrorInterceptorHandler>>();
 
   @override
   int get priority => BaseInterceptor.refreshTokenPriority;
@@ -43,83 +43,83 @@ class RefreshTokenInterceptor extends BaseInterceptor {
     // }
   }
 
-  void _putAccessToken({
-    required Map<String, dynamic> headers,
-    required String accessToken,
-  }) {
-    headers[NetworkConstants.basicAuthorization] =
-        '${NetworkConstants.bearer} $accessToken';
-  }
+  // void _putAccessToken({
+  //   required Map<String, dynamic> headers,
+  //   required String accessToken,
+  // }) {
+  //   headers[NetworkConstants.basicAuthorization] =
+  //       '${NetworkConstants.bearer} $accessToken';
+  // }
 
-  Future<void> _onExpiredToken({
-    required RequestOptions options,
-    required ErrorInterceptorHandler handler,
-  }) async {
-    _queue.addLast(Tuple2(options, handler));
-    if (!_isRefreshing) {
-      _isRefreshing = true;
-      try {
-        final newToken = await _refreshToken();
-        await _onRefreshTokenSuccess(newToken);
-      } catch (e) {
-        _onRefreshTokenError(e);
-      } finally {
-        _isRefreshing = false;
-        _queue.clear();
-      }
-    }
-  }
+  // Future<void> _onExpiredToken({
+  //   required RequestOptions options,
+  //   required ErrorInterceptorHandler handler,
+  // }) async {
+  //   _queue.addLast(Tuple2(options, handler));
+  //   if (!_isRefreshing) {
+  //     _isRefreshing = true;
+  //     try {
+  //       final newToken = await _refreshToken();
+  //       await _onRefreshTokenSuccess(newToken);
+  //     } catch (e) {
+  //       _onRefreshTokenError(e);
+  //     } finally {
+  //       _isRefreshing = false;
+  //       _queue.clear();
+  //     }
+  //   }
+  // }
 
-  Future<String> _refreshToken() async {
-    _isRefreshing = true;
-    final refreshToken = await appPreferences.refreshToken;
-    final refreshTokenResponse =
-        await refreshTokenService.refreshToken(refreshToken);
-    await Future.wait(
-      [
-        appPreferences.saveAccessToken(
-          refreshTokenResponse.data?.accessToken ?? '',
-        ),
-      ],
-    );
+  // Future<String> _refreshToken() async {
+  //   _isRefreshing = true;
+  //   final refreshToken = await appPreferences.refreshToken;
+  //   final refreshTokenResponse =
+  //       await refreshTokenService.refreshToken(refreshToken);
+  //   await Future.wait(
+  //     [
+  //       appPreferences.saveAccessToken(
+  //         refreshTokenResponse.data?.accessToken ?? '',
+  //       ),
+  //     ],
+  //   );
 
-    return refreshTokenResponse.data?.accessToken ?? '';
-  }
+  //   return refreshTokenResponse.data?.accessToken ?? '';
+  // }
 
-  Future<void> _onRefreshTokenSuccess(String newToken) async {
-    await Future.wait(_queue.map(
-      (requestInfo) => _requestWithNewToken(
-        options: requestInfo.value1,
-        handler: requestInfo.value2,
-        newAccessToken: newToken,
-      ),
-    ));
-  }
+  // Future<void> _onRefreshTokenSuccess(String newToken) async {
+  //   await Future.wait(_queue.map(
+  //     (requestInfo) => _requestWithNewToken(
+  //       options: requestInfo.value1,
+  //       handler: requestInfo.value2,
+  //       newAccessToken: newToken,
+  //     ),
+  //   ));
+  // }
 
-  void _onRefreshTokenError(Object? error) {
-    for (var element in _queue) {
-      final options = element.value1;
-      final handler = element.value2;
-      handler.next(DioException(requestOptions: options, error: error));
-    }
-  }
+  // void _onRefreshTokenError(Object? error) {
+  //   for (var element in _queue) {
+  //     final options = element.value1;
+  //     final handler = element.value2;
+  //     handler.next(DioException(requestOptions: options, error: error));
+  //   }
+  // }
 
-  Future<void> _requestWithNewToken({
-    required RequestOptions options,
-    required ErrorInterceptorHandler handler,
-    required String newAccessToken,
-  }) async {
-    _putAccessToken(headers: options.headers, accessToken: newAccessToken);
+  // Future<void> _requestWithNewToken({
+  //   required RequestOptions options,
+  //   required ErrorInterceptorHandler handler,
+  //   required String newAccessToken,
+  // }) async {
+  //   _putAccessToken(headers: options.headers, accessToken: newAccessToken);
 
-    try {
-      final noneAuth = DioBuilder.createDio(
-        options: BaseOptions(baseUrl: NetworkConstants.appApiBaseUrl),
-      );
+  //   try {
+  //     final noneAuth = DioBuilder.createDio(
+  //       options: BaseOptions(baseUrl: NetworkConstants.appApiBaseUrl),
+  //     );
 
-      final response = await noneAuth.fetch(options);
-      handler.resolve(response);
-    } catch (e) {
-      handler.next(DioException(requestOptions: options, error: e));
-    }
-  }
+  //     final response = await noneAuth.fetch(options);
+  //     handler.resolve(response);
+  //   } catch (e) {
+  //     handler.next(DioException(requestOptions: options, error: e));
+  //   }
+  // }
 }

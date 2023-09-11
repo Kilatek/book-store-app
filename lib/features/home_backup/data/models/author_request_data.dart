@@ -9,7 +9,7 @@ class AuthorRequestData with _$AuthorRequestData {
     @JsonKey(name: 'firstName') String? firstName,
     @JsonKey(name: 'lastName') String? lastName,
     @JsonKey(name: 'birthDate') String? birthDate,
-    @JsonKey(name: 'Nationality') String? nationality,
+    @JsonKey(name: 'nationality') String? nationality,
   }) = _AuthorRequestData;
 
   factory AuthorRequestData.fromJson(Map<String, dynamic> json) =>
