@@ -1,16 +1,16 @@
 import 'package:book_store/core/preference/shared_preference_constants.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 @LazySingleton()
 class AppPreferences {
   AppPreferences(
-    this._sharedPreference,
+    // this._sharedPreference,
     this._secureStorage,
   );
 
-  final SharedPreferences _sharedPreference;
+  // final SharedPreferences _sharedPreference;
   final FlutterSecureStorage _secureStorage;
 
   Future<String> get deviceToken async {

@@ -131,7 +131,7 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<UnitResult> updateAuthor(String id, AuthorRequestData data) {
     return handleCommon<Unit>(
       () async {
-        await remoteDataSource.deleteAuthor(id, data);
+        await remoteDataSource.updateAuthor(id, data);
         return unit;
       },
     );
@@ -141,7 +141,7 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<UnitResult> updateBook(String id, BookRequestData data) {
     return handleCommon<Unit>(
       () async {
-        await remoteDataSource.deleteBook(id, data);
+        await remoteDataSource.updateBook(id, data);
         return unit;
       },
     );

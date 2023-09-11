@@ -6,13 +6,19 @@ import 'package:book_store/core/util/view_utils.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_button.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_textfield.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_bloc.dart';
+import 'package:book_store/features/home_backup/presentation/bloc/home_event.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_state.dart';
+import 'package:book_store/navigation/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class BookPage extends StatefulWidget {
-  const BookPage({Key? key}) : super(key: key);
+  const BookPage({
+    super.key,
+    required this.id,
+  });
+  final String? id;
 
   @override
   State<BookPage> createState() => _PageState();
@@ -28,10 +34,41 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
   @override
   void initState() {
     super.initState();
-    _name.addListener(() {});
-    _description.addListener(() {});
-    _publicationDate.addListener(() {});
-    _price.addListener(() {});
+    _name.addListener(() {
+      bloc.add(HomeEvent.bookNameChanged(_name.text));
+    });
+    _description.addListener(() {
+      bloc.add(HomeEvent.bookDescriptionChanged(_description.text));
+    });
+    _publicationDate.addListener(() {
+      bloc.add(HomeEvent.bookPublicationDateChanged(_publicationDate.text));
+    });
+    _price.addListener(() {
+      bloc.add(HomeEvent.bookPriceChanged(_price.text));
+    });
+    bloc.add(HomeEvent.bookInitial(
+      widget.id != null ? PageType.update : PageType.add,
+    ));
+  }
+
+  @override
+  Widget buildPageListener({required Widget child}) {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<HomeBloc, HomeState>(
+          listenWhen: (previous, current) =>
+              previous.pageType != current.pageType && current.pageType != null,
+          listener: (context, state) {
+            _name.text = state.bookName.getOrElse(() => '');
+            _description.text = state.bookDescription.getOrElse(() => '');
+            _publicationDate.text =
+                state.bookPublicationDate.getOrElse(() => '');
+            _price.text = state.bookPrice.getOrElse(() => '');
+          },
+        ),
+      ],
+      child: child,
+    );
   }
 
   @override
@@ -46,40 +83,64 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
   @override
   Widget buildPage(BuildContext context) {
     final media = MediaQuery.sizeOf(context);
+    final pageType = widget.id != null ? PageType.update : PageType.add;
     return Scaffold(
       backgroundColor: AppColors.white,
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        centerTitle: true,
+        elevation: 0,
+        leading: InkWell(
+          onTap: () => navigator.pop(),
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            height: 40,
+            width: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.lightGray,
+              borderRadius: BorderRadius.circular(
+                10,
+              ),
+            ),
+            child: Image.asset(
+              "assets/img/black_btn.png",
+              width: 15,
+              height: 15,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        title: Text(
+          pageType == PageType.add ? 'Create Book' : 'Update Book',
+          style: const TextStyle(
+            color: AppColors.black,
+            fontSize: Dimens.d20,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
       body: GestureDetector(
         onTap: () => ViewUtils.hideKeyboard(context),
         child: SingleChildScrollView(
           child: SafeArea(
             child: Container(
-              height: media.height * 0.9,
+              height: media.height * 0.85,
               padding: const EdgeInsets.symmetric(horizontal: Dimens.d20),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Create Book',
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: Dimens.d20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    SizedBox(
-                      height: media.width * 0.05,
-                    ),
                     SizedBox(
                       height: media.width * 0.04,
                     ),
                     BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                       return RoundTextField(
-                        // validator: (_) => state.emailAddress.fold(
-                        //   (f) => f.message,
-                        //   (r) => null,
-                        // ),
+                        validator: (_) => state.bookName.fold(
+                          (f) => f.message,
+                          (r) => null,
+                        ),
                         hitText: 'Name',
                         icon: "assets/img/user_text.png",
                         keyboardType: TextInputType.emailAddress,
@@ -91,10 +152,10 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                     ),
                     BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                       return RoundTextField(
-                        // validator: (_) => state.password.fold(
-                        //   (f) => f.message,
-                        //   (r) => null,
-                        // ),
+                        validator: (_) => state.bookDescription.fold(
+                          (f) => f.message,
+                          (r) => null,
+                        ),
                         hitText: 'Description',
                         icon: "assets/img/user_text.png",
                         controller: _description,
@@ -105,10 +166,10 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                     ),
                     BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                       return RoundTextField(
-                        // validator: (_) => state.password.fold(
-                        //   (f) => f.message,
-                        //   (r) => null,
-                        // ),
+                        validator: (_) => state.bookPublicationDate.fold(
+                          (f) => f.message,
+                          (r) => null,
+                        ),
                         hitText: 'Publication Date',
                         icon: "assets/img/time_workout.png",
                         controller: _publicationDate,
@@ -134,10 +195,10 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                     ),
                     BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                       return RoundTextField(
-                        // validator: (_) => state.password.fold(
-                        //   (f) => f.message,
-                        //   (r) => null,
-                        // ),
+                        validator: (_) => state.bookPrice.fold(
+                          (f) => f.message,
+                          (r) => null,
+                        ),
                         hitText: 'Price',
                         icon: "assets/img/user_text.png",
                         keyboardType: TextInputType.number,
@@ -182,31 +243,22 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                     SizedBox(
                       height: media.width * 0.02,
                     ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Text(
-                    //       'Forgot your password?',
-                    //       style: TextStyle(
-                    //         color: AppColors.gray,
-                    //         fontSize: Dimens.d10,
-                    //         decoration: TextDecoration.underline,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                     const Spacer(),
                     BlocBuilder<HomeBloc, HomeState>(
                       builder: (context, state) {
                         return RoundButton(
-                          // isLoading: state.isSubmitting,
+                          isLoading: state.isSubmitting,
                           title: 'Save',
                           onPressed: () {
-                            // if (_formKey.currentState?.validate() == true) {
-                            //   bloc.add(
-                            //     const SignInWithEmailAndPasswordPressed(),
-                            //   );
-                            // }
+                            if (_formKey.currentState?.validate() == true) {
+                              pageType == PageType.add
+                                  ? bloc.add(
+                                      const HomeEvent.createBookPressed(),
+                                    )
+                                  : bloc.add(
+                                      const HomeEvent.updateBookPressed(),
+                                    );
+                            }
                           },
                         );
                       },

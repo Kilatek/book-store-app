@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:book_store/core/util/log_mixin.dart';
 import 'package:book_store/core/util/view_utils.dart';
@@ -174,6 +172,15 @@ class AppNavigator with LogMixin {
       message,
       duration: duration,
       backgroundColor: Colors.red,
+    );
+  }
+
+  void showSuccessSnackBar({required String message, Duration? duration}) {
+    ViewUtils.showAppSnackBar(
+      _rootRouterContext,
+      message,
+      duration: duration,
+      backgroundColor: Colors.green,
     );
   }
 }

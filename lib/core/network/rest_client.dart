@@ -26,12 +26,12 @@ abstract class RestClient {
 
   @GET('/api/v1/books/{id}')
   Future<BookResponseData> getBookById(
-    @Query("id") String id,
+    @Path("id") String id,
   );
 
   @GET('/api/v1/authors/{id}')
   Future<AuthorResponseData> getAuthorById(
-    @Query("id") String id,
+    @Path("id") String id,
   );
 
   @POST('/api/v1/books')
@@ -46,25 +46,25 @@ abstract class RestClient {
 
   @PUT('/api/v1/books/{id}')
   Future<BookResponseData> updateBook(
-    @Query("id") String id,
+    @Path("id") String id,
     @Body() BookRequestData data,
   );
 
   @PUT('/api/v1/authors/{id}')
   Future<AuthorResponseData> updateAuthor(
-    @Query("id") String id,
+    @Path("id") String id,
     @Body() AuthorRequestData data,
   );
 
   @DELETE('/api/v1/books/{id}')
   Future<BookResponseData> deleteBook(
-    @Query("id") String id,
+    @Path("id") String id,
     @Body() BookRequestData data,
   );
 
   @DELETE('/api/v1/authors/{id}')
   Future<AuthorResponseData> deleteAuthor(
-    @Query("id") String id,
+    @Path("id") String id,
     @Body() AuthorRequestData data,
   );
 }
