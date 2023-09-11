@@ -22,10 +22,10 @@ class AppRouter extends _$AppRouter {
           page: AuthRoute.page,
         ),
         AutoRoute(
-          initial: true,
           page: HomeRoute.page,
         ),
         AutoRoute(
+          initial: true,
           page: SplashRoute.page,
         ),
         AutoRoute(
