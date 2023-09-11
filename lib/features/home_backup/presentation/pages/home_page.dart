@@ -162,19 +162,29 @@ class PageState extends BasePageState<HomePage, HomeBloc> {
                 children: [
                   BlocBuilder<HomeBloc, HomeState>(
                     builder: (context, state) {
-                      return ListView(
-                        scrollDirection: Axis.vertical,
-                        padding: const EdgeInsets.only(left: 15, right: 15),
-                        children: getNewBooks(state.books),
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          bloc.add(const HomeEvent.updateBooks());
+                        },
+                        child: ListView(
+                          scrollDirection: Axis.vertical,
+                          padding: const EdgeInsets.only(left: 15, right: 15),
+                          children: getNewBooks(state.books),
+                        ),
                       );
                     },
                   ),
                   BlocBuilder<HomeBloc, HomeState>(
                     builder: (context, state) {
-                      return ListView(
-                        scrollDirection: Axis.vertical,
-                        padding: const EdgeInsets.only(left: 15, right: 15),
-                        children: getPopularBooks(state.authors),
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          bloc.add(const HomeEvent.updateAuthors());
+                        },
+                        child: ListView(
+                          scrollDirection: Axis.vertical,
+                          padding: const EdgeInsets.only(left: 15, right: 15),
+                          children: getPopularBooks(state.authors),
+                        ),
                       );
                     },
                   ),
