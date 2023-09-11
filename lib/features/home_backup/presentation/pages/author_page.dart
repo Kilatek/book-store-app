@@ -204,6 +204,7 @@ class _PageState extends BasePageState<AuthorPage, HomeBloc> {
                     ),
                     BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                       return RoundTextField(
+                        readOnly: true,
                         onTap: () => _selectDate(context),
                         validator: (_) => state.authorBirthDate.fold(
                           (f) => f.message,
