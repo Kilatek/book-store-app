@@ -1,9 +1,9 @@
 import 'package:book_store/features/auth/data/models/auth_response_data.dart';
 import 'package:book_store/features/auth/data/models/login_request_data.dart';
-import 'package:book_store/features/home_backup/data/models/author_request_data.dart';
-import 'package:book_store/features/home_backup/data/models/author_response_data.dart';
-import 'package:book_store/features/home_backup/data/models/book_request_data.dart';
-import 'package:book_store/features/home_backup/data/models/book_response_data.dart';
+import 'package:book_store/features/home/data/models/author_request_data.dart';
+import 'package:book_store/features/home/data/models/author_response_data.dart';
+import 'package:book_store/features/home/data/models/book_request_data.dart';
+import 'package:book_store/features/home/data/models/book_response_data.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 

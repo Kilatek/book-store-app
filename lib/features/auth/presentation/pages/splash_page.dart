@@ -27,7 +27,7 @@ class _AuthPageState extends BasePageState<SplashPage, AuthBloc> {
       backgroundColor: AppColors.white,
       body: Center(
         child: Image.asset(
-          'assets/img/logo.png',
+          'assets/img/logo.jpg',
           width: media.width * 0.5,
         ),
       ),
