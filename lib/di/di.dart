@@ -64,5 +64,6 @@ abstract class ServiceModule {
 }
 
 final GetIt getIt = GetIt.instance;
+
 @injectableInit
-void configureInjection() => getIt.init();
+Future<void> configureInjection() => getIt.init();

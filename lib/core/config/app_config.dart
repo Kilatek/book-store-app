@@ -14,7 +14,5 @@ class AppConfig {
 
   Future<void> init() => _asyncMemoizer.runOnce(config);
 
-  Future<void> config() async {
-    configureInjection();
-  }
+  Future<void> config() => configureInjection();
 }
