@@ -13,6 +13,7 @@ import 'package:book_store/features/home_backup/presentation/bloc/home_event.dar
 import 'package:book_store/features/home_backup/presentation/bloc/home_state.dart';
 import 'package:book_store/features/home_backup/presentation/widgets/auhor_item.dart';
 import 'package:book_store/features/home_backup/presentation/widgets/book_item.dart';
+import 'package:book_store/navigation/popup/app_popup_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -72,8 +73,16 @@ class PageState extends BasePageState<HomePage, HomeBloc> {
               width: 15,
             ),
             IconButton(
-              onPressed: () {
-                commonBloc.add(const ForceLogoutButtonPressed());
+              onPressed: () async {
+                await navigator.showAdaptiveDialog(
+                  appPopupInfo: AppPopupInfo.confirmDialog(
+                    message: 'Are you sure you want to logout?',
+                    title: 'Logout',
+                    onPressed: Func0(() {
+                      commonBloc.add(const ForceLogoutButtonPressed());
+                    }),
+                  ),
+                );
               },
               icon: const Icon(
                 Icons.logout,

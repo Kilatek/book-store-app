@@ -22,9 +22,18 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     this.getAuthorsUsecase,
     this.getActionStreamUsecase,
   ) : super(HomeState.initial()) {
-    on<HomeEventInital>(onHomeEventInital);
-    on<HomeEventAuthorsUpdated>(onHomeEventAuhorsUpdated);
-    on<HomeEventBoooksUpdated>(onHomeEventBooksUpdated);
+    on<HomeEventInital>(
+      onHomeEventInital,
+      transformer: log(),
+    );
+    on<HomeEventAuthorsUpdated>(
+      onHomeEventAuhorsUpdated,
+      transformer: log(),
+    );
+    on<HomeEventBoooksUpdated>(
+      onHomeEventBooksUpdated,
+      transformer: log(),
+    );
   }
 
   final GetBooksUsecase getBooksUsecase;
