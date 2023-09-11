@@ -1,21 +1,53 @@
+import 'package:book_store/core/error/app_error.dart';
+import 'package:book_store/core/error/error_mapper.dart';
+import 'package:book_store/core/error/exceptions.dart';
+import 'package:dartx/dartx.dart';
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 
-import '../error/failures.dart';
-
+@LazySingleton()
 class InputConverter {
-  Either<Failure, int> stringToUnsignedInteger(String string) {
+  Result<String> email(String input) {
+    // const emailRegex =
+    //     r"""^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+""";
     try {
-      final integer = int.parse(string);
-      if (integer < 0) throw FormatException();
-      return Right(integer);
-    } on FormatException {
-      return Left(InvalidInputFailure());
+      if (input.isBlank) throw ValidateEmptyException();
+      // if (!RegExp(emailRegex).hasMatch(input)) {
+      //   throw ValidateWronEmailException();
+      // }
+      return Right(input);
+    } catch (e) {
+      return Left(ErrorMapperFactory.map(e));
     }
   }
-}
 
-class InvalidInputFailure extends Failure {
-  @override
-  // TODO: implement props
-  List<Object?> get props => [];
+  Result<String> password(String input) {
+    try {
+      if (input.isBlank) throw ValidateEmptyException();
+      if (input.length < 6) throw ValidateWrongPasswordException();
+      return Right(input);
+    } catch (e) {
+      return Left(ErrorMapperFactory.map(e));
+    }
+  }
+
+  Result<String> defaultValidate(String input) {
+    try {
+      if (input.isBlank) throw ValidateEmptyException();
+      return Right(input);
+    } catch (e) {
+      return Left(ErrorMapperFactory.map(e));
+    }
+  }
+
+  Result<String> price(String input) {
+    try {
+      if (input.isBlank) throw ValidateEmptyException();
+      double.tryParse(input);
+      if (double.tryParse(input) == null) throw ValidateNotNumberException();
+      return Right(input);
+    } catch (e) {
+      return Left(ErrorMapperFactory.map(e));
+    }
+  }
 }
