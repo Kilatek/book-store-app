@@ -152,7 +152,7 @@ class _PageState extends BasePageState<AuthorPage, HomeBloc> {
                   ),
                 ),
                 child: const Icon(
-                  Icons.close,
+                  Icons.delete,
                   color: Colors.red,
                 ),
               ),

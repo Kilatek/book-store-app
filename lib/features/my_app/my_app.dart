@@ -22,7 +22,11 @@ class _MyAppState extends BasePageState<MyApp, AppBloc> {
     return MaterialApp.router(
       title: 'Book store',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(brightness: Brightness.light, primaryColor: primary),
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primaryColor: primary,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       routerDelegate: _appRouter.delegate(),
       routeInformationParser: _appRouter.defaultRouteParser(),
     );
