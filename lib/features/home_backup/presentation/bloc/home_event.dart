@@ -6,4 +6,6 @@ part 'home_event.freezed.dart';
 @freezed
 class HomeEvent extends BaseBlocEvent with _$HomeEvent {
   const factory HomeEvent.initial() = HomeEventInital;
+  const factory HomeEvent.updateBooks() = HomeEventBoooksUpdated;
+  const factory HomeEvent.updateAuthors() = HomeEventAuthorsUpdated;
 }

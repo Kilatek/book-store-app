@@ -16,10 +16,17 @@ Flutter project using TDD Clean Architecture and bloc pattern
     - [Installation](#installation)
     - [Usage](#usage)
     - [Tests](#tests)
-    - [Contributing](#contributing)
     - [License](#license)
 
 ### Features
+
+- [x] Clean Architecture
+- [x] TDD
+- [x] BLoC Pattern
+- [x] Dependency Injection
+- [x] Firebase Integration
+- [x] Local Data Storage
+- [x] Remote Data Storage
 
 ### Requirements
 
@@ -86,7 +93,7 @@ flutter pub get
 - Create project in here <https://console.firebase.google.com/>
 - Add Firebase to flutter app <https://firebase.google.com/docs/flutter/setup>
 - Enable Database Realtime.
-- Download files from [Google Driver](https://drive.google.com/drive/folders/1weVqSGtMlAySuwY3LpYwLNcCoz0wkI5F):
+Add files:
   - firebase_options.dart >> lib/
   - google-services.json >> android/app/
   - keystore.properties >> android/app/
@@ -114,12 +121,6 @@ The app should start and you can explore the books.
 ```bash
 flutter test
 ```
-
-### Contributing
-
-Contributions are welcome! If you find any bugs or want to add new features, feel free to open an issue or submit a pull request. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as needed.
 
 ### License
 

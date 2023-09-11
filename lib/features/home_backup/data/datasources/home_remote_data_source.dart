@@ -1,9 +1,11 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:injectable/injectable.dart';
+
 import 'package:book_store/core/network/rest_client.dart';
 import 'package:book_store/features/home_backup/data/models/author_request_data.dart';
 import 'package:book_store/features/home_backup/data/models/author_response_data.dart';
 import 'package:book_store/features/home_backup/data/models/book_request_data.dart';
 import 'package:book_store/features/home_backup/data/models/book_response_data.dart';
-import 'package:injectable/injectable.dart';
 
 abstract class HomeRemoteDataSource {
   Future<List<BookResponseData>> getBooks();
@@ -45,13 +47,20 @@ abstract class HomeRemoteDataSource {
     String id,
     AuthorRequestData data,
   );
+
+  Stream<String> getActionStream(String path);
 }
 
 @LazySingleton(as: HomeRemoteDataSource)
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   final RestClient client;
+  final FirebaseDatabase database;
+  late final DatabaseReference _dbref = database.ref();
 
-  HomeRemoteDataSourceImpl({required this.client});
+  HomeRemoteDataSourceImpl({
+    required this.client,
+    required this.database,
+  });
 
   @override
   Future<AuthorResponseData> createAuthor(
@@ -110,4 +119,10 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     BookRequestData data,
   ) =>
       client.updateBook(id, data);
+
+  @override
+  Stream<String> getActionStream(String path) => _dbref
+      .child(path)
+      .onValue
+      .map((event) => event.snapshot.value.toString());
 }

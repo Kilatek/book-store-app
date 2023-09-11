@@ -9,6 +9,7 @@ import 'package:book_store/features/home_backup/data/models/author_request_data.
 import 'package:book_store/features/home_backup/data/models/book_data_mapper.dart';
 import 'package:book_store/features/home_backup/data/models/book_request_data.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/network/middleware/network_info.dart';
@@ -144,5 +145,14 @@ class HomeRepositoryImpl implements HomeRepository {
         return unit;
       },
     );
+  }
+
+  @override
+  Stream<Result<String>> getActionStream(String ref) {
+    return remoteDataSource.getActionStream(ref).map((event) {
+      return right<AppError, String>(event);
+    }).onErrorReturnWith((error, stackTrace) {
+      return left<AppError, String>(ErrorMapperFactory.map(error));
+    });
   }
 }

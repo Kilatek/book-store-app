@@ -5,6 +5,7 @@ import 'package:book_store/core/error/error_listener_mixin.dart';
 import 'package:book_store/core/error/handle_exception.dart';
 import 'package:book_store/core/theme/app_colors.dart';
 import 'package:book_store/core/util/log_mixin.dart';
+import 'package:book_store/core/util/stream/dispose_bag.dart';
 import 'package:book_store/features/my_app/app_bloc.dart';
 import 'package:book_store/navigation/app_navigator.dart';
 import 'package:flutter/material.dart';
@@ -36,12 +37,16 @@ abstract class BasePageStateDelegete<T extends StatefulWidget,
   late final HandleException handleException = HandleException();
   late final CommonBloc commonBloc = GetIt.instance.get<CommonBloc>()
     ..navigator = navigator
+    ..disposeBag = disposeBag
     ..appBloc = appBloc;
 
   late final B bloc = GetIt.instance.get<B>()
     ..navigator = navigator
     ..appBloc = appBloc
+    ..disposeBag = disposeBag
     ..commonBloc = commonBloc;
+
+  late final DisposeBag disposeBag = DisposeBag();
 
   bool isAppWidget = false;
 
@@ -84,4 +89,10 @@ abstract class BasePageStateDelegete<T extends StatefulWidget,
           color: AppColors.black,
         ),
       );
+
+  @override
+  void dispose() {
+    super.dispose();
+    disposeBag.dispose();
+  }
 }
