@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:badges/badges.dart' as badge;
 import 'package:book_store/core/base/base_page.dart';
@@ -61,7 +63,7 @@ class PageState extends BasePageState<HomePage, HomeBloc> {
               width: 15,
             ),
             AvatarImage(
-              profile,
+              "https://i.pravatar.cc/300?img=${Random().nextInt(10)}",
               isSVG: false,
               width: 27,
               height: 27,
@@ -209,5 +211,3 @@ class PageState extends BasePageState<HomePage, HomeBloc> {
     );
   }
 }
-
-var profile = "https://avatars.githubusercontent.com/u/86506519?v=4";
