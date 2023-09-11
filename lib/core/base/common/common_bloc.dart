@@ -13,8 +13,14 @@ import 'common_state.dart';
 @Injectable()
 class CommonBloc extends BaseBloc<CommonEvent, CommonState> {
   CommonBloc(this._clearCurrentUserDataUseCase) : super(const CommonState()) {
-    on<LoadingChanged>(onLoadingChanged);
-    on<ExceptionEmitted>(onExceptionEmitted);
+    on<LoadingChanged>(
+      onLoadingChanged,
+      transformer: log(),
+    );
+    on<ExceptionEmitted>(
+      onExceptionEmitted,
+      transformer: log(),
+    );
     on<ForceLogoutButtonPressed>(
       onForceLogoutButtonPressed,
       transformer: log(),

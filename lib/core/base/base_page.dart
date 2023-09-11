@@ -16,15 +16,17 @@ import 'package:provider/provider.dart';
 abstract class BasePageState<T extends StatefulWidget, B extends BaseBloc>
     extends BasePageStateDelegete<T, B> with ErrorListenerMixin {
   @override
-  Widget buildPageListener({required Widget child}) {
+  Widget buildBasePageListener({required Widget child}) {
     return BlocListener<CommonBloc, CommonState>(
       listenWhen: (previous, current) =>
           previous.appExceptionWrapper != current.appExceptionWrapper &&
           current.appExceptionWrapper != null,
-      listener: (context, state) => handleException.handleException(
-        state.appExceptionWrapper!,
-        this,
-      ),
+      listener: (context, state) {
+        handleException.handleException(
+          state.appExceptionWrapper!,
+          this,
+        );
+      },
       child: child,
     );
   }
@@ -59,28 +61,31 @@ abstract class BasePageStateDelegete<T extends StatefulWidget,
           BlocProvider<B>(create: (_) => bloc),
           BlocProvider<CommonBloc>(create: (_) => commonBloc),
         ],
-        child: buildPageListener(
-          child: isAppWidget
-              ? buildPage(context)
-              : Stack(
-                  children: [
-                    buildPage(context),
-                    BlocBuilder<CommonBloc, CommonState>(
-                      buildWhen: (previous, current) =>
-                          previous.isLoading != current.isLoading,
-                      builder: (context, state) => Visibility(
-                        visible: state.isLoading,
-                        child: buildPageLoading(),
+        child: buildBasePageListener(
+          child: buildPageListener(
+            child: isAppWidget
+                ? buildPage(context)
+                : Stack(
+                    children: [
+                      buildPage(context),
+                      BlocBuilder<CommonBloc, CommonState>(
+                        buildWhen: (previous, current) =>
+                            previous.isLoading != current.isLoading,
+                        builder: (context, state) => Visibility(
+                          visible: state.isLoading,
+                          child: buildPageLoading(),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+          ),
         ),
       ),
     );
   }
 
   Widget buildPageListener({required Widget child}) => child;
+  Widget buildBasePageListener({required Widget child}) => child;
 
   Widget buildPage(BuildContext context);
 

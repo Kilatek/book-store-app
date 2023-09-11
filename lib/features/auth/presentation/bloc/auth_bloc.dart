@@ -20,11 +20,26 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
     this._inputConverter,
     this._checkIsLoginUsecase,
   ) : super(AuthState.initial()) {
-    on<EmailChanged>(onEmailChanged);
-    on<AuthEventInitial>(onAuthEventInitial);
-    on<PasswordChanged>(onPasswordChanged);
-    on<SignInWithEmailAndPasswordPressed>(onSignInWithEmailAndPasswordPressed);
-    on<ShowHidePasswordToggle>(onShowHidePasswordToggle);
+    on<EmailChanged>(
+      onEmailChanged,
+      transformer: log(),
+    );
+    on<AuthEventInitial>(
+      onAuthEventInitial,
+      transformer: log(),
+    );
+    on<PasswordChanged>(
+      onPasswordChanged,
+      transformer: log(),
+    );
+    on<SignInWithEmailAndPasswordPressed>(
+      onSignInWithEmailAndPasswordPressed,
+      transformer: log(),
+    );
+    on<ShowHidePasswordToggle>(
+      onShowHidePasswordToggle,
+      transformer: log(),
+    );
   }
 
   final LoginUsecase _loginUsecase;
