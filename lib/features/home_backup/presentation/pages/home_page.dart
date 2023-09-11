@@ -2,17 +2,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:badges/badges.dart' as badge;
 import 'package:book_store/core/base/base_page.dart';
 import 'package:book_store/core/theme/app_colors.dart';
-import 'package:book_store/features/home/presentation/widgets/avatar_image.dart';
-import 'package:book_store/features/home_backup/domain/entities/author.dart';
-import 'package:book_store/features/home_backup/domain/entities/book.dart';
+import 'package:book_store/features/author/presentation/pages/author_page.dart';
+import 'package:book_store/features/author/presentation/widgets/add_author_dialog.dart';
+import 'package:book_store/features/book/presentation/pages/book_page.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_bloc.dart';
-import 'package:book_store/features/home_backup/presentation/bloc/home_event.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_state.dart';
-import 'package:book_store/features/home_backup/presentation/widgets/auhor_item.dart';
-import 'package:book_store/features/home_backup/presentation/widgets/book_item.dart';
+import 'package:book_store/features/home_backup/presentation/widgets/avatar_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
+
+var profile = "https://avatars.githubusercontent.com/u/86506519?v=4";
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -22,21 +21,25 @@ class HomePage extends StatefulWidget {
   PageState createState() => PageState();
 }
 
-class PageState extends BasePageState<HomePage, HomeBloc> {
+class PageState extends BasePageState<HomePage, HomeBloc>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
-    bloc.add(const HomeEvent.initial());
+    _tabController = TabController(vsync: this, length: 2);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget buildPage(BuildContext context) {
-    return body();
-  }
-
-  Widget body() {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: AppColors.appBgColor,
         elevation: 0,
@@ -93,6 +96,8 @@ class PageState extends BasePageState<HomePage, HomeBloc> {
                 ],
               ),
               child: TabBar(
+                controller: _tabController, // Make sure the controller is set
+
                 indicatorColor: AppColors.black,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -145,23 +150,17 @@ class PageState extends BasePageState<HomePage, HomeBloc> {
             ),
             Expanded(
               child: TabBarView(
+                controller: _tabController, // Make sure the controller is set
+
                 children: [
                   BlocBuilder<HomeBloc, HomeState>(
                     builder: (context, state) {
-                      return ListView(
-                        scrollDirection: Axis.vertical,
-                        padding: const EdgeInsets.only(left: 15, right: 15),
-                        children: getNewBooks(state.books),
-                      );
+                      return BookPage(state.books);
                     },
                   ),
                   BlocBuilder<HomeBloc, HomeState>(
                     builder: (context, state) {
-                      return ListView(
-                        scrollDirection: Axis.vertical,
-                        padding: const EdgeInsets.only(left: 15, right: 15),
-                        children: getPopularBooks(state.authors),
-                      );
+                      return AuthorPage(state.authors);
                     },
                   ),
                 ],
@@ -172,30 +171,25 @@ class PageState extends BasePageState<HomePage, HomeBloc> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.black,
-        onPressed: () {},
-        tooltip: 'Toggle',
+        onPressed: () {
+          if (_tabController.index == 0) {
+            // add book
+          } else {
+            // add user
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext _context) {
+                return AddAuthorDialog(
+                  onClose: () {},
+                );
+              },
+            );
+          }
+        },
+        tooltip: _tabController.index == 0 ? "Add book" : "Add author",
         child: const Icon(Icons.add),
       ),
     );
   }
-
-  getNewBooks(List<Book> books) {
-    return List.generate(
-      books.length,
-      (index) => BookItem(
-        book: books[index],
-      ),
-    );
-  }
-
-  getPopularBooks(List<Author> authors) {
-    return List.generate(
-      authors.length,
-      (index) => AuthorItem(
-        author: authors[index],
-      ),
-    );
-  }
 }
-
-var profile = "https://avatars.githubusercontent.com/u/86506519?v=4";

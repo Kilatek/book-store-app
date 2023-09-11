@@ -78,8 +78,8 @@ abstract class BasePageStateDelegete<T extends StatefulWidget,
   Widget buildPage(BuildContext context);
 
   Widget buildPageLoading() => const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.black,
-        ),
+        // child: CircularProgressIndicator(
+        //   color: AppColors.black,
+        // ),
       );
 }
