@@ -155,7 +155,7 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                   ),
                 ),
                 child: const Icon(
-                  Icons.close,
+                  Icons.delete,
                   color: Colors.red,
                 ),
               ),
@@ -269,30 +269,40 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                                 current.authors.isNotEmpty ||
                             current.bookAuthor != null,
                         builder: (context, state) {
-                          final items = state.authors
-                              .map((e) =>
-                                  '${e.firstName} ${e.lastName} - ${e.birthDate}')
-                              .toList();
+                          final items = state.authors.indexed.map(
+                            (v) {
+                              final (i, e) = v;
+                              return '${i + 1} ${e.firstName} ${e.lastName} - ${e.birthDate}';
+                            },
+                          ).toList();
                           if (items.isEmpty) return Container();
                           String initilalValue = items.first;
                           if (state.bookAuthor != null) {
+                            final index = state.authors
+                                    .map((e) => e.id)
+                                    .toList()
+                                    .indexOf(state.bookAuthor!.id) +
+                                1;
                             initilalValue =
-                                '${state.bookAuthor?.firstName} ${state.bookAuthor?.lastName} - ${state.bookAuthor?.birthDate}';
+                                '$index ${state.bookAuthor?.firstName} ${state.bookAuthor?.lastName} - ${state.bookAuthor?.birthDate}';
                           }
 
-                          return RoundDropDown(
-                            value: initilalValue,
-                            hitText: 'Author',
-                            icon: "assets/img/user_text.png",
-                            items: items,
-                            onChanged: (value) {
-                              final (_, index) = value;
-                              bloc.add(
-                                HomeEvent.bookAuthorChanged(
-                                  state.authors[index],
-                                ),
-                              );
-                            },
+                          return SizedBox(
+                            height: 50,
+                            child: RoundDropDown(
+                              value: initilalValue,
+                              hitText: 'Author',
+                              icon: "assets/img/user_text.png",
+                              items: items,
+                              onChanged: (value) {
+                                final (_, index) = value;
+                                bloc.add(
+                                  HomeEvent.bookAuthorChanged(
+                                    state.authors[index],
+                                  ),
+                                );
+                              },
+                            ),
                           );
                         }),
                     SizedBox(
