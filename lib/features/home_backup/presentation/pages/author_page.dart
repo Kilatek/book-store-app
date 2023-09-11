@@ -8,8 +8,10 @@ import 'package:book_store/features/auth/presentation/widgets/round_textfield.da
 import 'package:book_store/features/home_backup/presentation/bloc/home_bloc.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_event.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_state.dart';
+import 'package:book_store/features/home_backup/presentation/widgets/date_picker.dart';
 import 'package:book_store/navigation/app_routes.dart';
 import 'package:book_store/navigation/popup/app_popup_info.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,7 +33,7 @@ class _PageState extends BasePageState<AuthorPage, HomeBloc> {
   final _birthDate = TextEditingController();
   final _nationality = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
+  DateTime selectedDate = DateTime.now();
   @override
   void initState() {
     super.initState();
@@ -202,6 +204,7 @@ class _PageState extends BasePageState<AuthorPage, HomeBloc> {
                     ),
                     BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                       return RoundTextField(
+                        onTap: () => _selectDate(context),
                         validator: (_) => state.authorBirthDate.fold(
                           (f) => f.message,
                           (r) => null,
@@ -275,6 +278,21 @@ class _PageState extends BasePageState<AuthorPage, HomeBloc> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return DatePicker(
+          initialDate: selectedDate,
+          onDateSelected: (newDate) {
+            selectedDate = newDate;
+            _birthDate.text = "${newDate.toLocal()}".split(' ')[0];
+          },
+        );
+      },
     );
   }
 }

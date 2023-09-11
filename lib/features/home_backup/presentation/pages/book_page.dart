@@ -8,7 +8,9 @@ import 'package:book_store/features/auth/presentation/widgets/round_textfield.da
 import 'package:book_store/features/home_backup/presentation/bloc/home_bloc.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_event.dart';
 import 'package:book_store/features/home_backup/presentation/bloc/home_state.dart';
+import 'package:book_store/features/home_backup/presentation/widgets/date_picker.dart';
 import 'package:book_store/navigation/app_routes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,6 +32,7 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
   final _publicationDate = TextEditingController();
   final _price = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  DateTime selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -166,6 +169,7 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                     ),
                     BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                       return RoundTextField(
+                        onTap: () => _selectDate(context),
                         validator: (_) => state.bookPublicationDate.fold(
                           (f) => f.message,
                           (r) => null,
@@ -273,6 +277,21 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    await showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return DatePicker(
+          initialDate: selectedDate,
+          onDateSelected: (selectedDate) {
+            selectedDate = selectedDate;
+            _publicationDate.text = "${selectedDate.toLocal()}".split(' ')[0];
+          },
+        );
+      },
     );
   }
 }
