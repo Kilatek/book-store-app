@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:book_store/core/error/exceptions.dart';
 import 'package:book_store/core/network/middleware/base_interceptor.dart';
 import 'package:book_store/core/network/base/dio_builder.dart';
 import 'package:book_store/core/network/base/network_constants.dart';
@@ -29,11 +30,17 @@ class RefreshTokenInterceptor extends BaseInterceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == HttpStatus.unauthorized) {
-      final options = err.response!.requestOptions;
-      _onExpiredToken(options: options, handler: handler);
+      throw RefreshTokenException();
     } else {
       handler.next(err);
     }
+
+    // if (err.response?.statusCode == HttpStatus.unauthorized) {
+    //   final options = err.response!.requestOptions;
+    //   _onExpiredToken(options: options, handler: handler);
+    // } else {
+    //   handler.next(err);
+    // }
   }
 
   void _putAccessToken({

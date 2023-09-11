@@ -5,12 +5,14 @@ import 'package:book_store/core/base/base_event.dart';
 import 'package:book_store/core/base/base_state.dart';
 import 'package:book_store/core/error/app_error.dart';
 import 'package:book_store/core/error/app_exception_wrapper.dart';
+import 'package:book_store/core/util/stream_utils.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
 mixin BaseBlocMixin<E extends BaseBlocEvent, S extends BaseBlocState>
     on BaseBlocDelegete<E, S> {
+  String get name => runtimeType.toString();
   Future<void> runBlocCatching<T>(
     FutureOr<Either<AppError, T>> action, {
     FutureOr<void> Function(AppError)? doOnError,
@@ -61,5 +63,10 @@ mixin BaseBlocMixin<E extends BaseBlocEvent, S extends BaseBlocState>
           leading: leading,
         )
         .flatMap(mapper);
+  }
+
+  EventTransformer<Event> log<Event>() {
+    return (events, mapper) =>
+        events.log(name, logOnData: true).flatMap(mapper);
   }
 }

@@ -6,4 +6,7 @@ abstract class AuthRepository {
     required String email,
     required String password,
   });
+
+  Future<UnitResult> clearCurrentUserData();
+  Future<Result<bool>> isLoginUser();
 }

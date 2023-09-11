@@ -34,7 +34,9 @@ abstract class BasePageStateDelegete<T extends StatefulWidget,
   late final AppNavigator navigator = GetIt.instance.get<AppNavigator>();
   late final AppBloc appBloc = GetIt.instance.get<AppBloc>();
   late final HandleException handleException = HandleException();
-  late final CommonBloc commonBloc = GetIt.instance.get<CommonBloc>();
+  late final CommonBloc commonBloc = GetIt.instance.get<CommonBloc>()
+    ..navigator = navigator
+    ..appBloc = appBloc;
 
   late final B bloc = GetIt.instance.get<B>()
     ..navigator = navigator
