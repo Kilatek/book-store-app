@@ -204,7 +204,7 @@ class PageState extends BasePageState<HomePage, HomeBloc>
                     builder: (context, state) {
                       return RefreshIndicator(
                         onRefresh: () async {
-                          bloc.add(const HomeEvent.updateAuthors());
+                          bloc.add(const HomeEvent.updateAuthors(false));
                         },
                         child: ListView(
                           scrollDirection: Axis.vertical,
@@ -325,7 +325,6 @@ class PageState extends BasePageState<HomePage, HomeBloc>
       (index) => InkWell(
         onTap: () async {
           await navigator.push(BookRoute(id: books[index].id));
-          bloc.add(const HomeEvent.updateBooks());
         },
         child: BookItem(
           book: books[index],
@@ -339,8 +338,9 @@ class PageState extends BasePageState<HomePage, HomeBloc>
       authors.length,
       (index) => InkWell(
         onTap: () async {
-          await navigator.push(AuthorRoute(id: authors[index].id));
-          bloc.add(const HomeEvent.updateAuthors());
+          final isUpdate =
+              await navigator.push(AuthorRoute(id: authors[index].id));
+          if (isUpdate == true) bloc.add(const HomeEvent.updateAuthors(false));
         },
         child: AuthorItem(
           author: authors[index],

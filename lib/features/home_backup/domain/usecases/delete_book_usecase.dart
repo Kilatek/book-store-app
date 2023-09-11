@@ -8,19 +8,19 @@ import 'package:injectable/injectable.dart';
 import '../../../../core/usecases/usecase.dart';
 
 @Injectable()
-class UpdateBookUsecase implements UseCase<Unit, Params> {
+class DeleteBookUsecase implements UseCase<Unit, DeleteBookParams> {
   final HomeRepository repository;
 
-  UpdateBookUsecase(this.repository);
+  DeleteBookUsecase(this.repository);
 
   @override
-  Future<Either<AppError, Unit>> call(Params params) {
+  Future<Either<AppError, Unit>> call(DeleteBookParams params) {
     return repository.deleteBook(
       params.id,
       BookRequestData(
-        firstName: params.firstName,
-        lastName: params.lastName,
-        birthDate: params.birthDate,
+        name: params.name,
+        description: params.description,
+        publicationDate: params.publicationDate,
         price: params.price,
         authorId: params.authorId,
       ),
@@ -28,19 +28,19 @@ class UpdateBookUsecase implements UseCase<Unit, Params> {
   }
 }
 
-class Params extends Equatable {
+class DeleteBookParams extends Equatable {
+  final String name;
   final String id;
-  final String firstName;
-  final String lastName;
-  final String birthDate;
+  final String description;
+  final String publicationDate;
   final double price;
   final String authorId;
 
-  const Params({
+  const DeleteBookParams({
     required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.birthDate,
+    required this.name,
+    required this.description,
+    required this.publicationDate,
     required this.price,
     required this.authorId,
   });
@@ -48,9 +48,9 @@ class Params extends Equatable {
   @override
   List<Object?> get props => [
         id,
-        firstName,
-        lastName,
-        birthDate,
+        name,
+        description,
+        publicationDate,
         price,
         authorId,
       ];

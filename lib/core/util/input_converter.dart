@@ -39,4 +39,15 @@ class InputConverter {
       return Left(ErrorMapperFactory.map(e));
     }
   }
+
+  Result<String> price(String input) {
+    try {
+      if (input.isBlank) throw ValidateEmptyException();
+      double.tryParse(input);
+      if (double.tryParse(input) == null) throw ValidateNotNumberException();
+      return Right(input);
+    } catch (e) {
+      return Left(ErrorMapperFactory.map(e));
+    }
+  }
 }

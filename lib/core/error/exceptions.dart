@@ -8,6 +8,8 @@ class RefreshTokenException implements Exception {}
 
 class ValidateEmptyException implements Exception {}
 
+class ValidateNotNumberException implements Exception {}
+
 class ValidateWrongEmailException implements Exception {}
 
 class ValidateWrongPasswordException implements Exception {}
