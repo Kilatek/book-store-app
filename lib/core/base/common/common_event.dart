@@ -10,4 +10,6 @@ class CommonEvent extends BaseBlocEvent with _$CommonEvent {
 
   const factory CommonEvent.exceptionEmitted(
       AppExceptionWrapper appExceptionWrapper) = ExceptionEmitted;
+
+  const factory CommonEvent.foreLogout() = ForceLogoutButtonPressed;
 }

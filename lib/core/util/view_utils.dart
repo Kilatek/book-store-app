@@ -18,7 +18,10 @@ class ViewUtils {
     messengerState.hideCurrentSnackBar();
     messengerState.showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
         duration: duration ?? _defaultSnackBarDuration,
         backgroundColor: backgroundColor,
       ),

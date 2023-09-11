@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:book_store/core/base/base_bloc.dart';
 import 'package:book_store/core/util/input_converter.dart';
 import 'package:book_store/features/auth/domain/entities/user.dart';
+import 'package:book_store/features/auth/domain/usecases/check_is_login_usecase.dart';
 import 'package:book_store/features/auth/domain/usecases/login_usecase.dart';
+import 'package:book_store/navigation/app_routes.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -12,15 +15,39 @@ import 'auth_state.dart';
 
 @Injectable()
 class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
-  AuthBloc(this._loginUsecase, this._inputConverter)
-      : super(AuthState.initial()) {
+  AuthBloc(
+    this._loginUsecase,
+    this._inputConverter,
+    this._checkIsLoginUsecase,
+  ) : super(AuthState.initial()) {
     on<EmailChanged>(onEmailChanged);
+    on<AuthEventInitial>(onAuthEventInitial);
     on<PasswordChanged>(onPasswordChanged);
     on<SignInWithEmailAndPasswordPressed>(onSignInWithEmailAndPasswordPressed);
   }
 
   final LoginUsecase _loginUsecase;
+  final CheckIsLoginUsecase _checkIsLoginUsecase;
   final InputConverter _inputConverter;
+
+  Future<void> onAuthEventInitial(
+    AuthEventInitial event,
+    Emitter<AuthState> emit,
+  ) async {
+    runBlocCatching<bool>(
+      _checkIsLoginUsecase.call(unit),
+      doOnSuccess: (isLogin) {
+        Future.delayed(const Duration(seconds: 2), () {
+          if (isLogin) {
+            navigator.replace(const HomeRoute());
+          } else {
+            navigator.replace(const AuthRoute());
+          }
+        });
+      },
+      isHandleLoading: false,
+    );
+  }
 
   Future<void> onEmailChanged(
     EmailChanged event,

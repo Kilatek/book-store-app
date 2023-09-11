@@ -5,7 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 @LazySingleton()
 class AppPreferences {
-  AppPreferences(this._sharedPreference, this._secureStorage);
+  AppPreferences(
+    this._sharedPreference,
+    this._secureStorage,
+  );
 
   final SharedPreferences _sharedPreference;
   final FlutterSecureStorage _secureStorage;
@@ -25,10 +28,8 @@ class AppPreferences {
         '';
   }
 
-  bool get isLoggedIn {
-    final token =
-        _sharedPreference.getString(SharedPreferenceKeys.accessToken) ?? '';
-
+  Future<bool> get isLoggedIn async {
+    final token = await accessToken;
     return token.isNotEmpty;
   }
 
@@ -54,11 +55,6 @@ class AppPreferences {
   }
 
   Future<void> clearCurrentUserData() async {
-    await Future.wait(
-      [
-        _sharedPreference.remove(SharedPreferenceKeys.accessToken),
-        _sharedPreference.remove(SharedPreferenceKeys.refreshToken),
-      ],
-    );
+    await _secureStorage.deleteAll();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:badges/badges.dart' as badge;
 import 'package:book_store/core/base/base_page.dart';
+import 'package:book_store/core/base/common/common_event.dart';
 import 'package:book_store/core/theme/app_colors.dart';
 import 'package:book_store/features/home/presentation/widgets/avatar_image.dart';
 import 'package:book_store/features/home_backup/domain/entities/author.dart';
@@ -12,7 +13,6 @@ import 'package:book_store/features/home_backup/presentation/widgets/auhor_item.
 import 'package:book_store/features/home_backup/presentation/widgets/book_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -65,7 +65,19 @@ class PageState extends BasePageState<HomePage, HomeBloc> {
               isSVG: false,
               width: 27,
               height: 27,
-            )
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            IconButton(
+              onPressed: () {
+                commonBloc.add(const ForceLogoutButtonPressed());
+              },
+              icon: const Icon(
+                Icons.logout,
+                color: AppColors.black,
+              ),
+            ),
           ],
         ),
       ),

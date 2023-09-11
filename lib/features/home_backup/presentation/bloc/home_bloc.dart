@@ -37,6 +37,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
             ),
           );
         },
+        isHandleLoading: false,
       ),
       runBlocCatching<List<Author>>(
         getAuthorsUsecase.call(unit),
@@ -47,6 +48,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
             ),
           );
         },
+        isHandleLoading: false,
       )
     ]);
   }
