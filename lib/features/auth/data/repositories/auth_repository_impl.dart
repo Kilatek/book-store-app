@@ -28,6 +28,18 @@ class AuthRepositoryImpl implements AuthRepository {
     required this.appPreferences,
   });
 
+  Future<Result<T>> handleCommon<T>(TaskExcute<T> task) async {
+    try {
+      if (await networkInfo.isConnected) {
+        return right(await task());
+      } else {
+        throw NotInterNetException();
+      }
+    } catch (error) {
+      return left(ErrorMapperFactory.map(error));
+    }
+  }
+
   @override
   Future<Result<User>> login({
     required String email,
@@ -47,15 +59,16 @@ class AuthRepositoryImpl implements AuthRepository {
         },
       );
 
-  Future<Result<T>> handleCommon<T>(TaskExcute<T> task) async {
-    try {
-      if (await networkInfo.isConnected) {
-        return right(await task());
-      } else {
-        throw NotInterNetException();
-      }
-    } catch (error) {
-      return left(ErrorMapperFactory.map(error));
-    }
-  }
+  @override
+  Future<UnitResult> clearCurrentUserData() => handleCommon(
+        () async {
+          await appPreferences.clearCurrentUserData();
+          return unit;
+        },
+      );
+
+  @override
+  Future<Result<bool>> isLoginUser() => handleCommon(
+        () => appPreferences.isLoggedIn,
+      );
 }

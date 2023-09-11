@@ -14,6 +14,8 @@ class HandleException {
         return errorListener.onUncaugth(appExceptionWrapper);
       case AppExceptionType.dioError:
         return errorListener.onServerError(appExceptionWrapper);
+      case AppExceptionType.refreshTokenFail:
+        return errorListener.onRefreshTokenFail(appExceptionWrapper);
       default:
         return errorListener.onUncaugth(appExceptionWrapper);
     }

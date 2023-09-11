@@ -11,11 +11,13 @@ class AuthState extends BaseBlocState with _$AuthState {
   const factory AuthState({
     required Result<String> emailAddress,
     required Result<String> password,
+    required bool isShowPassword,
     User? user,
     required bool isSubmitting,
   }) = _AuthState;
 
   factory AuthState.initial() => AuthState(
+        isShowPassword: false,
         emailAddress: Left<AppError, String>(
           AppError(
             appExceptionType: AppExceptionType.validateEmpty,

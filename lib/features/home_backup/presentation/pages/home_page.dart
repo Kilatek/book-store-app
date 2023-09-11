@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:badges/badges.dart' as badge;
 import 'package:book_store/core/base/base_page.dart';
+import 'package:book_store/core/base/common/common_event.dart';
 import 'package:book_store/core/theme/app_colors.dart';
 import 'package:book_store/features/author/presentation/pages/author_page.dart';
 import 'package:book_store/features/author/presentation/widgets/add_author_dialog.dart';
@@ -11,7 +14,7 @@ import 'package:book_store/features/home_backup/presentation/widgets/avatar_imag
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-var profile = "https://avatars.githubusercontent.com/u/86506519?v=4";
+import '../bloc/home_event.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -64,11 +67,23 @@ class PageState extends BasePageState<HomePage, HomeBloc>
               width: 15,
             ),
             AvatarImage(
-              profile,
+              "https://i.pravatar.cc/300?img=${Random().nextInt(10)}",
               isSVG: false,
               width: 27,
               height: 27,
-            )
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            IconButton(
+              onPressed: () {
+                commonBloc.add(const ForceLogoutButtonPressed());
+              },
+              icon: const Icon(
+                Icons.logout,
+                color: AppColors.black,
+              ),
+            ),
           ],
         ),
       ),
@@ -155,12 +170,22 @@ class PageState extends BasePageState<HomePage, HomeBloc>
                 children: [
                   BlocBuilder<HomeBloc, HomeState>(
                     builder: (context, state) {
-                      return BookPage(state.books);
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          bloc.add(const HomeEvent.updateBooks());
+                        },
+                        child: BookPage(state.books),
+                      );
                     },
                   ),
                   BlocBuilder<HomeBloc, HomeState>(
                     builder: (context, state) {
-                      return AuthorPage(state.authors);
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          bloc.add(const HomeEvent.updateAuthors());
+                        },
+                        child: AuthorPage(state.authors),
+                      );
                     },
                   ),
                 ],

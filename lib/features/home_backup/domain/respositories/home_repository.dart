@@ -44,4 +44,6 @@ abstract class HomeRepository {
     String id,
     AuthorRequestData data,
   );
+
+  Stream<Result<String>> getActionStream(String ref);
 }

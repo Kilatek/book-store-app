@@ -6,7 +6,9 @@ part 'auth_event.freezed.dart';
 @freezed
 class AuthEvent extends BaseBlocEvent with _$AuthEvent {
   const factory AuthEvent.emailChanged(String emailStr) = EmailChanged;
+  const factory AuthEvent.initial() = AuthEventInitial;
   const factory AuthEvent.passwordChanged(String passwordStr) = PasswordChanged;
+  const factory AuthEvent.showHidePasswordToggle() = ShowHidePasswordToggle;
   const factory AuthEvent.signInWithEmailAndPasswordPressed() =
       SignInWithEmailAndPasswordPressed;
 }
