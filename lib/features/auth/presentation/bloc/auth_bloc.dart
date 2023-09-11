@@ -24,6 +24,7 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
     on<AuthEventInitial>(onAuthEventInitial);
     on<PasswordChanged>(onPasswordChanged);
     on<SignInWithEmailAndPasswordPressed>(onSignInWithEmailAndPasswordPressed);
+    on<ShowHidePasswordToggle>(onShowHidePasswordToggle);
   }
 
   final LoginUsecase _loginUsecase;
@@ -56,6 +57,17 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
     emit(
       state.copyWith(
         emailAddress: _inputConverter.email(event.emailStr),
+      ),
+    );
+  }
+
+  Future<void> onShowHidePasswordToggle(
+    ShowHidePasswordToggle event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        isShowPassword: !state.isShowPassword,
       ),
     );
   }

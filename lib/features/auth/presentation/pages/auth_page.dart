@@ -121,16 +121,20 @@ class _AuthPageState extends BasePageState<AuthPage, AuthBloc> {
                         ),
                         hitText: 'Password',
                         icon: "assets/img/lock.png",
-                        obscureText: true,
+                        obscureText: !state.isShowPassword,
                         controller: _passwordControler,
                         rigtIcon: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            bloc.add(const AuthEvent.showHidePasswordToggle());
+                          },
                           child: Container(
                             alignment: Alignment.center,
                             width: Dimens.d20,
                             height: Dimens.d20,
                             child: Image.asset(
-                              "assets/img/show_password.png",
+                              state.isShowPassword
+                                  ? "assets/img/show_password.png"
+                                  : "assets/img/hide_password.png",
                               width: Dimens.d20,
                               height: Dimens.d20,
                               fit: BoxFit.contain,
