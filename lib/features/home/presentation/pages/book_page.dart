@@ -6,7 +6,6 @@ import 'package:book_store/core/util/view_utils.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_button.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_dropdown.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_textfield.dart';
-import 'package:book_store/features/home/domain/entities/author.dart';
 import 'package:book_store/features/home/presentation/bloc/home_bloc.dart';
 import 'package:book_store/features/home/presentation/bloc/home_event.dart';
 import 'package:book_store/features/home/presentation/bloc/home_state.dart';
@@ -36,7 +35,6 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
   final _publicationDate = TextEditingController();
   final _price = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _hasAuthor = false;
   DateTime selectedDate = DateTime.now();
 
   @override
@@ -266,7 +264,6 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                               return '${i + 1} ${e.firstName} ${e.lastName} - ${e.birthDate}';
                             },
                           ).toList();
-                          _hasAuthor = items.isNotEmpty;
                           if (items.isEmpty) return Container();
                           String initilalValue = items.first;
                           if (state.bookAuthor != null) {
@@ -308,7 +305,7 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                           title: 'Save',
                           onPressed: () {
                             if (_formKey.currentState?.validate() == true) {
-                              if (_hasAuthor) {
+                              if (state.authors.isNotEmpty) {
                                 pageType == PageType.add
                                     ? bloc.add(
                                         const HomeEvent.createBookPressed(),
