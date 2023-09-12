@@ -96,7 +96,8 @@ flutter pub get
 Add files:
   - firebase_options.dart >> lib/
   - google-services.json >> android/app/
-  - keystore.properties >> android/app/
+  - keystore.properties >> android/
+  - key_store >> android/app/
   - GoogleService-Info.plist >> ios/Runner/
   - firebase_app_id_file.json >> ios/
 
