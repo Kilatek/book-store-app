@@ -6,6 +6,7 @@ import 'package:book_store/core/util/view_utils.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_button.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_dropdown.dart';
 import 'package:book_store/features/auth/presentation/widgets/round_textfield.dart';
+import 'package:book_store/features/home/domain/entities/author.dart';
 import 'package:book_store/features/home/presentation/bloc/home_bloc.dart';
 import 'package:book_store/features/home/presentation/bloc/home_event.dart';
 import 'package:book_store/features/home/presentation/bloc/home_state.dart';
@@ -14,6 +15,7 @@ import 'package:book_store/navigation/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:book_store/navigation/popup/app_popup_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
@@ -34,6 +36,7 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
   final _publicationDate = TextEditingController();
   final _price = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _hasAuthor = false;
   DateTime selectedDate = DateTime.now();
 
   @override
@@ -224,6 +227,9 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                     ),
                     BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
                       return RoundTextField(
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         validator: (_) => state.bookPrice.fold(
                           (f) => f.message,
                           (r) => null,
@@ -260,6 +266,7 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                               return '${i + 1} ${e.firstName} ${e.lastName} - ${e.birthDate}';
                             },
                           ).toList();
+                          _hasAuthor = items.isNotEmpty;
                           if (items.isEmpty) return Container();
                           String initilalValue = items.first;
                           if (state.bookAuthor != null) {
@@ -301,15 +308,21 @@ class _PageState extends BasePageState<BookPage, HomeBloc> {
                           title: 'Save',
                           onPressed: () {
                             if (_formKey.currentState?.validate() == true) {
-                              pageType == PageType.add
-                                  ? bloc.add(
-                                      const HomeEvent.createBookPressed(),
-                                    )
-                                  : bloc.add(
-                                      HomeEvent.updateBookPressed(
-                                        widget.id ?? '',
-                                      ),
-                                    );
+                              if (_hasAuthor) {
+                                pageType == PageType.add
+                                    ? bloc.add(
+                                        const HomeEvent.createBookPressed(),
+                                      )
+                                    : bloc.add(
+                                        HomeEvent.updateBookPressed(
+                                          widget.id ?? '',
+                                        ),
+                                      );
+                              } else {
+                                navigator.showErrorSnackBar(
+                                    message:
+                                        "You have to create at least one author before create book.");
+                              }
                             }
                           },
                         );
