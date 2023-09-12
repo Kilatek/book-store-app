@@ -1,6 +1,7 @@
 import 'package:book_store/core/dimens/dimens.dart';
 import 'package:book_store/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RoundTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -13,6 +14,7 @@ class RoundTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final void Function()? onTap;
   final bool readOnly;
+  final List<TextInputFormatter>? inputFormatters;
   const RoundTextField({
     super.key,
     required this.hitText,
@@ -25,6 +27,7 @@ class RoundTextField extends StatelessWidget {
     this.validator,
     this.onTap,
     this.readOnly = false,
+    this.inputFormatters,
   });
 
   @override
@@ -38,6 +41,7 @@ class RoundTextField extends StatelessWidget {
         ),
       ),
       child: TextFormField(
+        inputFormatters: inputFormatters,
         readOnly: readOnly,
         onTap: onTap,
         validator: validator,

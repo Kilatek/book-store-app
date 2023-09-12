@@ -1,5 +1,6 @@
 import 'package:book_store/core/network/base/dio_builder.dart';
 import 'package:book_store/core/network/middleware/access_token_interceptor.dart';
+import 'package:book_store/core/network/middleware/header_interceptor.dart';
 import 'package:book_store/core/network/middleware/refresh_token_interceptor.dart';
 import 'package:book_store/core/network/base/network_constants.dart';
 import 'package:book_store/core/network/refresh_rest_client.dart';
@@ -31,13 +32,17 @@ abstract class ServiceModule {
   RestClient restClient(
     AccessTokenInterceptor accessTokenInterceptor,
     RefreshTokenInterceptor refreshTokenInterceptor,
+    HeaderInterceptor headerInterceptor,
   ) =>
       RestClient(
         DioBuilder.createDio(
-          options: BaseOptions(baseUrl: NetworkConstants.appApiBaseUrl),
+          options: BaseOptions(
+            baseUrl: NetworkConstants.appApiBaseUrl,
+          ),
           interceptors: [
             accessTokenInterceptor,
             refreshTokenInterceptor,
+            headerInterceptor,
           ],
         ),
       );
@@ -45,12 +50,16 @@ abstract class ServiceModule {
   @singleton
   RefreshRestClient refreshRestClient(
     AccessTokenInterceptor accessTokenInterceptor,
+    HeaderInterceptor headerInterceptor,
   ) =>
       RefreshRestClient(
         DioBuilder.createDio(
-          options: BaseOptions(baseUrl: NetworkConstants.appApiBaseUrl),
+          options: BaseOptions(
+            baseUrl: NetworkConstants.appApiBaseUrl,
+          ),
           interceptors: [
             accessTokenInterceptor,
+            headerInterceptor,
           ],
         ),
       );

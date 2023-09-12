@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:book_store/features/auth/presentation/pages/auth_page.dart';
 import 'package:book_store/features/auth/presentation/pages/splash_page.dart';
-import 'package:book_store/features/home_backup/presentation/pages/home_page.dart';
-import 'package:book_store/features/home_backup/presentation/pages/author_page.dart';
-import 'package:book_store/features/home_backup/presentation/pages/book_page.dart';
+import 'package:book_store/features/home/presentation/pages/home_page.dart';
+import 'package:book_store/features/home/presentation/pages/author_page.dart';
+import 'package:book_store/features/home/presentation/pages/book_page.dart';
 
 part 'app_routes.gr.dart';
 
