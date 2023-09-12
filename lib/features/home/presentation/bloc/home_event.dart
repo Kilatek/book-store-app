@@ -9,8 +9,7 @@ part 'home_event.freezed.dart';
 class HomeEvent extends BaseBlocEvent with _$HomeEvent {
   const factory HomeEvent.initial() = HomeEventInital;
   const factory HomeEvent.updateBooks() = HomeEventBoooksUpdated;
-  const factory HomeEvent.updateAuthors(bool isAuthorInitial) =
-      HomeEventAuthorsUpdated;
+  const factory HomeEvent.updateAuthors() = HomeEventAuthorsUpdated;
   const factory HomeEvent.authorFirstNameChanged(String input) =
       AuthorFirstNameChanged;
   const factory HomeEvent.authorLastNameChanged(String input) =

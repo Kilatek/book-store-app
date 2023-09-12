@@ -159,14 +159,17 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     HomeEventInital event,
     Emitter<HomeState> emit,
   ) async {
-    add(const HomeEvent.updateAuthors(false));
+    add(const HomeEvent.updateAuthors());
     add(const HomeEvent.updateBooks());
     getActionStreamUsecase.call(const Params(ref: 'books')).listen((event) {
       event.fold(
         (l) => addException(
           AppExceptionWrapper(appError: l),
         ),
-        (r) => add(const HomeEvent.updateBooks()),
+        (r) {
+          add(const HomeEvent.updateAuthors());
+          add(const HomeEvent.updateBooks());
+        },
       );
     }).disposeBy(disposeBag);
   }
@@ -176,7 +179,6 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     if (event.pageType == PageType.update) {
-      add(const HomeEvent.updateAuthors(false));
       await runBlocCatching<Book>(
         getBookDetailUsecase.call(GetBookDetailParams(id: event.id)),
         doOnSuccess: (book) {
@@ -192,15 +194,17 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
               bookAuthor: book.author,
             ),
           );
+          add(const HomeEvent.updateAuthors());
         },
       );
     } else {
-      add(const HomeEvent.updateAuthors(true));
       emit(
         state.copyWith(
           pageType: event.pageType,
+          bookAuthor: null,
         ),
       );
+      add(const HomeEvent.updateAuthors());
     }
   }
 
@@ -253,8 +257,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     if (state.tabIndex == 0) {
       await navigator.push(BookRoute(id: null));
     } else {
-      final isUpdate = await navigator.push(AuthorRoute(id: null));
-      if (isUpdate == true) add(const HomeEvent.updateAuthors(false));
+      await navigator.push(AuthorRoute(id: null));
     }
   }
 
@@ -283,9 +286,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
           emit(
             state.copyWith(
               authors: authors,
-              bookAuthor: event.isAuthorInitial
-                  ? authors.firstOrNull
-                  : state.bookAuthor,
+              bookAuthor: state.bookAuthor ?? authors.firstOrNull,
             ),
           );
         },
